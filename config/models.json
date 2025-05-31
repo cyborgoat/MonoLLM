@@ -1,0 +1,198 @@
+{
+  "providers": {
+    "openai": {
+      "name": "OpenAI",
+      "base_url": "https://api.openai.com/v1",
+      "uses_openai_protocol": true,
+      "supports_streaming": true,
+      "supports_mcp": true,
+      "models": {
+        "gpt-4o": {
+          "name": "GPT-4o",
+          "max_tokens": 128000,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "is_reasoning_model": false
+        },
+        "gpt-4o-mini": {
+          "name": "GPT-4o Mini",
+          "max_tokens": 128000,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "is_reasoning_model": false
+        },
+        "o1": {
+          "name": "OpenAI o1",
+          "max_tokens": 100000,
+          "supports_temperature": false,
+          "supports_streaming": false,
+          "is_reasoning_model": true,
+          "supports_thinking": true
+        },
+        "o1-mini": {
+          "name": "OpenAI o1-mini",
+          "max_tokens": 65536,
+          "supports_temperature": false,
+          "supports_streaming": false,
+          "is_reasoning_model": true,
+          "supports_thinking": true
+        }
+      }
+    },
+    "anthropic": {
+      "name": "Anthropic",
+      "base_url": "https://api.anthropic.com",
+      "uses_openai_protocol": false,
+      "supports_streaming": true,
+      "supports_mcp": true,
+      "models": {
+        "claude-3-5-sonnet-20241022": {
+          "name": "Claude 3.5 Sonnet",
+          "max_tokens": 8192,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "is_reasoning_model": false
+        },
+        "claude-3-5-haiku-20241022": {
+          "name": "Claude 3.5 Haiku",
+          "max_tokens": 8192,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "is_reasoning_model": false
+        }
+      }
+    },
+    "google": {
+      "name": "Google Gemini",
+      "base_url": "https://generativelanguage.googleapis.com/v1beta",
+      "uses_openai_protocol": false,
+      "supports_streaming": true,
+      "supports_mcp": false,
+      "models": {
+        "gemini-2.0-flash-exp": {
+          "name": "Gemini 2.0 Flash Experimental",
+          "max_tokens": 8192,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "is_reasoning_model": false
+        },
+        "gemini-1.5-pro": {
+          "name": "Gemini 1.5 Pro",
+          "max_tokens": 8192,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "is_reasoning_model": false
+        },
+        "gemini-1.5-flash": {
+          "name": "Gemini 1.5 Flash",
+          "max_tokens": 8192,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "is_reasoning_model": false
+        }
+      }
+    },
+    "qwen": {
+      "name": "Qwen (DashScope)",
+      "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "uses_openai_protocol": true,
+      "supports_streaming": true,
+      "supports_mcp": false,
+      "models": {
+        "qwq-plus": {
+          "name": "QwQ Plus",
+          "max_tokens": 8192,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "is_reasoning_model": false
+        },
+        "qwq-32b": {
+          "name": "QwQ 32B",
+          "max_tokens": 8192,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "is_reasoning_model": false
+        },
+        "qwen3-32b": {
+          "name": "Qwen3 32B",
+          "max_tokens": 32768,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "is_reasoning_model": true,
+          "supports_thinking": true
+        },
+        "qwen3-30b-a3b": {
+          "name": "qwen3-30b-a3b",
+          "max_tokens": 98304,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "is_reasoning_model": true,
+          "supports_thinking": true
+        },
+        "qwen3-8b": {
+          "name": "Qwen3 8B",
+          "max_tokens": 28672,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "is_reasoning_model": true,
+          "supports_thinking": true
+        },
+        "qwen3-0.6b": {
+          "name": "Qwen3 0.6B",
+          "max_tokens": 28672,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "is_reasoning_model": true,
+          "supports_thinking": true
+        }
+      }
+    },
+    "deepseek": {
+      "name": "DeepSeek",
+      "base_url": "https://api.deepseek.com/v1",
+      "uses_openai_protocol": true,
+      "supports_streaming": true,
+      "supports_mcp": false,
+      "models": {
+        "deepseek-reasoner": {
+          "name": "DeepSeek R1",
+          "max_tokens": 4096,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "is_reasoning_model": true,
+          "supports_thinking": true
+        },
+        "deepseek-chat": {
+          "name": "DeepSeek V3",
+          "max_tokens": 8192,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "is_reasoning_model": false
+        }
+      }
+    },
+    "volcengine": {
+      "name": "Volcengine",
+      "base_url": "https://ark.cn-beijing.volces.com/api/v3",
+      "uses_openai_protocol": true,
+      "supports_streaming": true,
+      "supports_mcp": false,
+      "models": {
+        "doubao-1.5-thinking-pro": {
+          "name": "Doubao 1.5 Thinking Pro",
+          "max_tokens": 160000,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "is_reasoning_model": false
+        },
+        "deepseek-r1": {
+          "name": "DeepSeek R1",
+          "max_tokens": 160000,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "is_reasoning_model": false
+        }
+      }
+    }
+  }
+}
