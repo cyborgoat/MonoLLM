@@ -37,7 +37,9 @@ jobs:
     - name: Install dependencies
       run: |
         uv sync
-        uv pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints myst-parser
+        pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints myst-parser
+        which sphinx-build
+        sphinx-build --version
         
     - name: Build documentation
       run: |
