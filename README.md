@@ -1,385 +1,235 @@
 # UnifiedLLM
 
-A framework that handles different LLM providers with a simplified interface, allowing users to access multiple LLM models through a single, unified API.
+[![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://python.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![Documentation](https://img.shields.io/badge/docs-github--pages-blue)](https://cyborgoat.github.io/unified-llm/)
+[![GitHub Issues](https://img.shields.io/github/issues/cyborgoat/unified-llm)](https://github.com/cyborgoat/unified-llm/issues)
 
-## Features
+> **A powerful framework that provides a unified interface for multiple LLM providers, allowing developers to seamlessly switch between different AI models while maintaining consistent API interactions.**
 
-- 🔄 **Unified Interface**: Access multiple LLM providers through a single API
-- 🌐 **Proxy Support**: Configure HTTP/SOCKS5 proxies for all LLM calls
-- 📺 **Streaming**: Choose between streaming and non-streaming responses
-- 🧠 **Reasoning Models**: Special support for reasoning models with thinking steps
-- 🌡️ **Temperature Control**: Adjust creativity/randomness when supported
-- 🔢 **Token Management**: Set maximum output tokens for cost control
-- 🔧 **MCP Integration**: Support for Model Context Protocol when available
-- 🎯 **OpenAI Protocol**: Prefer OpenAI-compatible APIs when available
-- ⚙️ **JSON Configuration**: Easy configuration management through JSON files
+## 🚀 Key Features
 
-## Supported Providers
+- **🔄 Unified Interface**: Access multiple LLM providers through a single, consistent API
+- **🌐 Proxy Support**: Configure HTTP/SOCKS5 proxies for all LLM calls
+- **📺 Streaming**: Real-time streaming responses for better user experience
+- **🧠 Reasoning Models**: Special support for reasoning models with thinking steps
+- **🌡️ Temperature Control**: Fine-tune creativity and randomness when supported
+- **🔢 Token Management**: Control costs with maximum output token limits
+- **🔧 MCP Integration**: Model Context Protocol support when available
+- **🎯 OpenAI Protocol**: Prefer OpenAI-compatible APIs for consistency
+- **⚙️ JSON Configuration**: Easy configuration management through JSON files
+
+## 📋 Supported Providers
 
 | Provider | Status | Streaming | Reasoning | MCP | OpenAI Protocol |
 |----------|--------|-----------|-----------|-----|-----------------|
-| OpenAI | ✅ Implemented | ✅ | ✅ | ✅ | ✅ |
-| Anthropic | 🚧 Planned | ✅ | ❌ | ✅ | ❌ |
-| Google Gemini | 🚧 Planned | ✅ | ❌ | ❌ | ❌ |
-| Qwen (DashScope) | 🚧 Planned | ✅ | ✅ | ❌ | ✅ |
-| DeepSeek | 🚧 Planned | ✅ | ✅ | ❌ | ✅ |
-| Volcengine | 🚧 Planned | ✅ | ❌ | ❌ | ✅ |
+| **OpenAI** | ✅ Ready | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes |
+| **Anthropic** | ✅ Ready | ✅ Yes | ❌ No | ✅ Yes | ❌ No |
+| **Google Gemini** | 🚧 Planned | ✅ Yes | ❌ No | ❌ No | ❌ No |
+| **Qwen (DashScope)** | ✅ Ready | ✅ Yes | ✅ Yes | ❌ No | ✅ Yes |
+| **DeepSeek** | ✅ Ready | ✅ Yes | ✅ Yes | ❌ No | ✅ Yes |
+| **Volcengine** | 🚧 Planned | ✅ Yes | ❌ No | ❌ No | ✅ Yes |
 
-## Installation
+## 🛠️ Installation
 
 ### Prerequisites
 
-- Python 3.13+
-- uv (recommended) or pip
+- **Python 3.13+** (required)
+- **uv** (recommended) or **pip**
 
-### Install with uv
+### Quick Install
 
 ```bash
 # Clone the repository
 git clone https://github.com/cyborgoat/unified-llm.git
 cd unified-llm
 
-# Install dependencies
+# Install with uv (recommended)
 uv sync
-
-# Install in development mode
 uv pip install -e .
-```
 
-### Install with pip
-
-```bash
-# Clone the repository
-git clone https://github.com/cyborgoat/unified-llm.git
-cd unified-llm
-
-# Install dependencies
+# Or install with pip
 pip install -e .
 ```
 
-## Configuration
-
-### Environment Variables
-
-Set up your API keys as environment variables:
+### Verify Installation
 
 ```bash
-# OpenAI
-export OPENAI_API_KEY="your-openai-api-key"
+# Check CLI is working
+unified-llm --help
 
-# Anthropic
-export ANTHROPIC_API_KEY="your-anthropic-api-key"
-
-# Google Gemini
-export GOOGLE_API_KEY="your-google-api-key"
-
-# Qwen (DashScope)
-export DASHSCOPE_API_KEY="your-dashscope-api-key"
-
-# DeepSeek
-export DEEPSEEK_API_KEY="your-deepseek-api-key"
-
-# Volcengine
-export VOLCENGINE_API_KEY="your-volcengine-api-key"
-```
-
-You can also override base URLs:
-
-```bash
-export OPENAI_BASE_URL="https://your-custom-openai-endpoint.com/v1"
-```
-
-### Configuration Files
-
-The framework uses JSON configuration files in the `config/` directory:
-
-- `config/models.json`: Model definitions and capabilities
-- `config/proxy.json`: Proxy and network settings
-
-#### Proxy Configuration
-
-Edit `config/proxy.json` to configure proxy settings:
-
-```json
-{
-  "proxy": {
-    "enabled": true,
-    "type": "http",
-    "host": "proxy.example.com",
-    "port": 8080,
-    "username": "user",
-    "password": "pass",
-    "socks5": {
-      "enabled": false,
-      "host": "socks5.example.com",
-      "port": 1080
-    }
-  }
-}
-```
-
-## Usage
-
-### Command Line Interface
-
-#### List Providers
-
-```bash
+# List available providers
 unified-llm list-providers
 ```
 
-#### List Models
+## ⚡ Quick Start
+
+### 1. Set up API Keys
 
 ```bash
-# List all models
-unified-llm list-models
-
-# List models for specific provider
-unified-llm list-models --provider openai
+# Set API keys for the providers you want to use
+export DASHSCOPE_API_KEY="your-dashscope-api-key"  # For Qwen
+export ANTHROPIC_API_KEY="your-anthropic-api-key"  # For Claude
+export OPENAI_API_KEY="your-openai-api-key"        # For GPT models
 ```
 
-#### Interactive Chat
-
-```bash
-# Basic chat
-unified-llm chat gpt-4o
-
-# Chat with options
-unified-llm chat gpt-4o --temperature 0.7 --stream --max-tokens 1000
-
-# Chat with reasoning model
-unified-llm chat o1 --thinking
-```
-
-#### Single Generation
-
-```bash
-# Basic generation
-unified-llm generate "What is the capital of France?" --model gpt-4o
-
-# With streaming
-unified-llm generate "Explain quantum computing" --model gpt-4o --stream
-
-# With reasoning model
-unified-llm generate "Solve this math problem: 2x + 5 = 13" --model o1 --thinking
-```
-
-### Python API
-
-#### Basic Usage
+### 2. Basic Python Usage
 
 ```python
 import asyncio
 from unified_llm import UnifiedLLMClient, RequestConfig
 
 async def main():
-    # Initialize client
     async with UnifiedLLMClient() as client:
-        # Create request configuration
         config = RequestConfig(
-            model="gpt-4o",
+            model="qwq-32b",  # Qwen's reasoning model
             temperature=0.7,
             max_tokens=1000,
         )
         
-        # Generate response
         response = await client.generate(
-            "What is the capital of France?",
+            "Explain quantum computing in simple terms.",
             config
         )
         
         print(response.content)
-        print(f"Tokens used: {response.usage.total_tokens}")
+        if response.usage:
+            print(f"Tokens used: {response.usage.total_tokens}")
 
 asyncio.run(main())
 ```
 
-#### Streaming
-
-```python
-import asyncio
-from unified_llm import UnifiedLLMClient, RequestConfig
-
-async def main():
-    async with UnifiedLLMClient() as client:
-        config = RequestConfig(
-            model="gpt-4o",
-            stream=True,
-        )
-        
-        streaming_response = await client.generate_stream(
-            "Tell me a story",
-            config
-        )
-        
-        async for chunk in streaming_response:
-            if chunk.content:
-                print(chunk.content, end="", flush=True)
-
-asyncio.run(main())
-```
-
-#### Reasoning Models
-
-```python
-import asyncio
-from unified_llm import UnifiedLLMClient, RequestConfig
-
-async def main():
-    async with UnifiedLLMClient() as client:
-        config = RequestConfig(
-            model="o1",
-            show_thinking=True,
-        )
-        
-        response = await client.generate(
-            "Solve this complex math problem step by step: ...",
-            config
-        )
-        
-        if response.thinking:
-            print("Thinking:")
-            print(response.thinking)
-            print("\nAnswer:")
-        
-        print(response.content)
-
-asyncio.run(main())
-```
-
-#### Multi-turn Conversation
-
-```python
-import asyncio
-from unified_llm import UnifiedLLMClient, RequestConfig, Message
-
-async def main():
-    async with UnifiedLLMClient() as client:
-        config = RequestConfig(model="gpt-4o")
-        
-        messages = [
-            Message(role="system", content="You are a helpful assistant."),
-            Message(role="user", content="What's the weather like?"),
-        ]
-        
-        response = await client.generate(messages, config)
-        print(response.content)
-        
-        # Continue conversation
-        messages.append(Message(role="assistant", content=response.content))
-        messages.append(Message(role="user", content="What about tomorrow?"))
-        
-        response = await client.generate(messages, config)
-        print(response.content)
-
-asyncio.run(main())
-```
-
-## Model Capabilities
-
-### Reasoning Models
-
-Some models support "reasoning" or "thinking" capabilities:
-
-- **OpenAI o1/o1-mini**: Shows internal reasoning steps
-- **QwQ**: Qwen's reasoning model
-- **DeepSeek R1**: DeepSeek's reasoning model
-
-Enable thinking steps with `show_thinking=True` in your config.
-
-### Temperature Support
-
-Most models support temperature control (0.0 to 2.0):
-- Lower values (0.0-0.3): More focused and deterministic
-- Higher values (0.7-1.0): More creative and diverse
-
-Note: Reasoning models typically don't support temperature adjustment.
-
-## Development
-
-### Setup Development Environment
+### 3. CLI Usage
 
 ```bash
-# Clone the repository
+# Generate text with streaming
+unified-llm generate "What is artificial intelligence?" --model qwen-plus --stream
+
+# Use reasoning model with thinking steps
+unified-llm generate "Solve: 2x + 5 = 13" --model qwq-32b --thinking
+
+# List available models
+unified-llm list-models --provider qwen
+```
+
+## 📖 Documentation
+
+- **📚 [Full Documentation](https://cyborgoat.github.io/unified-llm/)** - Comprehensive guides and API reference
+- **🚀 [Quick Start Guide](https://cyborgoat.github.io/unified-llm/quickstart.html)** - Get up and running in minutes
+- **⚙️ [Configuration Guide](https://cyborgoat.github.io/unified-llm/configuration.html)** - Advanced configuration options
+- **💻 [CLI Documentation](https://cyborgoat.github.io/unified-llm/cli.html)** - Command-line interface guide
+- **🔧 [Examples](https://cyborgoat.github.io/unified-llm/examples.html)** - Practical usage examples
+
+## 🎯 Use Cases
+
+### Content Generation
+```python
+config = RequestConfig(model="qwen-plus", temperature=0.8, max_tokens=1000)
+response = await client.generate("Write a blog post about renewable energy", config)
+```
+
+### Code Assistance
+```python
+config = RequestConfig(model="qwq-32b", temperature=0.2)
+response = await client.generate("Explain this Python function: def fibonacci(n):", config)
+```
+
+### Reasoning & Analysis
+```python
+config = RequestConfig(model="qwq-32b", show_thinking=True)
+response = await client.generate("Analyze this data and find trends", config)
+```
+
+### Creative Writing
+```python
+config = RequestConfig(model="qwen-plus", temperature=1.0, max_tokens=2000)
+response = await client.generate("Write a science fiction short story", config)
+```
+
+## 🔧 Advanced Features
+
+### Streaming Responses
+```python
+async for chunk in await client.generate_stream(prompt, config):
+    if chunk.content:
+        print(chunk.content, end="", flush=True)
+```
+
+### Multi-turn Conversations
+```python
+messages = [
+    Message(role="system", content="You are a helpful assistant."),
+    Message(role="user", content="Hello!"),
+]
+response = await client.generate(messages, config)
+```
+
+### Error Handling
+```python
+from unified_llm.core.exceptions import UnifiedLLMError, ProviderError
+
+try:
+    response = await client.generate(prompt, config)
+except ProviderError as e:
+    print(f"Provider error: {e}")
+except UnifiedLLMError as e:
+    print(f"UnifiedLLM error: {e}")
+```
+
+## 🌐 Proxy Support
+
+Configure HTTP/SOCKS5 proxies:
+
+```bash
+export PROXY_ENABLED=true
+export PROXY_TYPE=http
+export PROXY_HOST=127.0.0.1
+export PROXY_PORT=7890
+```
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](https://cyborgoat.github.io/unified-llm/development/contributing.html) for details.
+
+### Development Setup
+
+```bash
+# Clone and install in development mode
 git clone https://github.com/cyborgoat/unified-llm.git
 cd unified-llm
-
-# Install with development dependencies
 uv sync --dev
 
 # Install pre-commit hooks
 pre-commit install
-```
 
-### Running Tests
-
-```bash
 # Run tests
 pytest
 
-# Run tests with coverage
-pytest --cov=unified_llm
+# Build documentation
+cd docs && make html
 ```
 
-### Code Quality
-
-```bash
-# Format code
-black src/ tests/
-isort src/ tests/
-
-# Lint code
-ruff check src/ tests/
-
-# Type checking
-mypy src/
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Add tests for your changes
-5. Ensure all tests pass
-6. Commit your changes (`git commit -m 'Add amazing feature'`)
-7. Push to the branch (`git push origin feature/amazing-feature`)
-8. Open a Pull Request
-
-## Provider Implementation
-
-To add a new provider, implement the `BaseProvider` interface:
-
-```python
-from unified_llm.providers.base import BaseProvider
-
-class MyProvider(BaseProvider):
-    def get_provider_name(self) -> str:
-        return "myprovider"
-    
-    async def generate(self, messages, config) -> LLMResponse:
-        # Implement your provider logic
-        pass
-    
-    async def generate_stream(self, messages, config) -> StreamingResponse:
-        # Implement streaming logic
-        pass
-```
-
-## License
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Roadmap
+## 🔗 Links
 
-- [ ] Complete Anthropic provider implementation
-- [ ] Complete Google Gemini provider implementation
-- [ ] Complete Qwen provider implementation
-- [ ] Complete DeepSeek provider implementation
-- [ ] Complete Volcengine provider implementation
-- [ ] Add MCP (Model Context Protocol) support
-- [ ] Add function calling support
-- [ ] Add image/multimodal support
-- [ ] Add conversation memory management
-- [ ] Add cost tracking and usage analytics
-- [ ] Add provider failover and load balancing 
+- **GitHub**: https://github.com/cyborgoat/unified-llm
+- **Documentation**: https://cyborgoat.github.io/unified-llm/
+- **Issues**: https://github.com/cyborgoat/unified-llm/issues
+- **Discussions**: https://github.com/cyborgoat/unified-llm/discussions
+
+## 🙏 Acknowledgments
+
+- Thanks to all the LLM providers for their amazing APIs
+- Inspired by the need for a unified interface across multiple AI providers
+- Built with modern Python async/await patterns for optimal performance
+
+## 👨‍💻 Author
+
+Created and maintained by **[cyborgoat](https://github.com/cyborgoat)**
+
+---
+
+**Made with ❤️ by cyborgoat** 

@@ -36,8 +36,13 @@ jobs:
         
     - name: Install dependencies
       run: |
+        # Install project dependencies
         uv sync
-        pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints myst-parser
+        
+        # Install documentation dependencies with pip to ensure they're on PATH
+        pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints myst-parser linkify-it-py mdit-py-plugins
+        
+        # Verify Sphinx installation
         which sphinx-build
         sphinx-build --version
         

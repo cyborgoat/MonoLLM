@@ -1,10 +1,11 @@
 """Configuration manager for the unified LLM framework."""
 
+import os
 from pathlib import Path
 from typing import Dict, Any, Optional
 
+from unified_llm.core.models import ProviderInfo, ProxyConfig, TimeoutConfig, RetryConfig
 from .loader import ConfigLoader
-from ..core.models import ProviderInfo, ProxyConfig, TimeoutConfig, RetryConfig
 
 
 class ConfigManager:

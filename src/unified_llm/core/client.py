@@ -1,4 +1,68 @@
-"""Main client for the unified LLM framework."""
+#!/usr/bin/env python3
+"""
+UnifiedLLM Client - Main interface for unified LLM provider access.
+
+This module provides the primary client interface for the UnifiedLLM framework,
+enabling seamless access to multiple Large Language Model providers through a
+single, consistent API.
+
+Key Features:
+    - Unified interface across multiple LLM providers
+    - Automatic provider discovery and initialization
+    - Configuration management and validation
+    - Streaming and non-streaming response support
+    - Error handling and retry mechanisms
+    - Proxy support for network configurations
+
+Supported Providers:
+    - OpenAI (GPT models, including reasoning models)
+    - Anthropic (Claude models)
+    - Google (Gemini models)
+    - Qwen/DashScope (Qwen models, including reasoning)
+    - DeepSeek (DeepSeek models, including reasoning)
+    - Volcengine (Doubao models)
+
+Example Usage:
+    Basic text generation:
+        >>> import asyncio
+        >>> from unified_llm import UnifiedLLMClient, RequestConfig
+        >>> 
+        >>> async def main():
+        ...     async with UnifiedLLMClient() as client:
+        ...         config = RequestConfig(model="qwen-plus", temperature=0.7)
+        ...         response = await client.generate("Hello, world!", config)
+        ...         print(response.content)
+        >>> 
+        >>> asyncio.run(main())
+
+    Streaming responses:
+        >>> async def stream_example():
+        ...     async with UnifiedLLMClient() as client:
+        ...         config = RequestConfig(model="gpt-4o", stream=True)
+        ...         async for chunk in await client.generate_stream("Tell me a story", config):
+        ...             if chunk.content:
+        ...                 print(chunk.content, end="", flush=True)
+
+    Multi-turn conversation:
+        >>> from unified_llm.core.models import Message
+        >>> 
+        >>> async def conversation_example():
+        ...     async with UnifiedLLMClient() as client:
+        ...         messages = [
+        ...             Message(role="system", content="You are a helpful assistant."),
+        ...             Message(role="user", content="What is Python?"),
+        ...         ]
+        ...         config = RequestConfig(model="claude-3-sonnet")
+        ...         response = await client.generate(messages, config)
+        ...         print(response.content)
+
+Author: cyborgoat
+License: MIT License
+Copyright: (c) 2025 cyborgoat
+
+For more information, visit: https://github.com/cyborgoat/unified-llm
+Documentation: https://cyborgoat.github.io/unified-llm/
+"""
 
 import uuid
 from pathlib import Path
@@ -7,21 +71,21 @@ from typing import Dict, List, Optional, Union
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
-from ..config.loader import ConfigLoader
-from ..providers.anthropic_provider import AnthropicProvider
-from ..providers.base import BaseProvider
-from ..providers.deepseek_provider import DeepSeekProvider
-from ..providers.google_provider import GoogleProvider
-from ..providers.openai_provider import OpenAIProvider
-from ..providers.qwen_provider import QwenProvider
-from ..providers.volcengine_provider import VolcengineProvider
-from .exceptions import (
+from unified_llm.config.loader import ConfigLoader
+from unified_llm.providers.anthropic_provider import AnthropicProvider
+from unified_llm.providers.base import BaseProvider
+from unified_llm.providers.deepseek_provider import DeepSeekProvider
+from unified_llm.providers.google_provider import GoogleProvider
+from unified_llm.providers.openai_provider import OpenAIProvider
+from unified_llm.providers.qwen_provider import QwenProvider
+from unified_llm.providers.volcengine_provider import VolcengineProvider
+from unified_llm.core.exceptions import (
     ConfigurationError,
     ModelNotFoundError,
     UnifiedLLMError,
     ValidationError,
 )
-from .models import (
+from unified_llm.core.models import (
     LLMResponse,
     Message,
     ModelInfo,
@@ -32,18 +96,63 @@ from .models import (
 
 
 class UnifiedLLMClient:
-    """Main client for unified access to multiple LLM providers."""
+    """
+    Main client for unified access to multiple LLM providers.
+    
+    This class serves as the primary interface for interacting with various
+    Large Language Model providers through a single, consistent API. It handles
+    provider initialization, configuration management, request routing, and
+    response processing.
+    
+    The client automatically discovers and initializes available providers based
+    on configuration files and environment variables. It supports both streaming
+    and non-streaming responses, handles errors gracefully, and provides detailed
+    logging and progress information.
+    
+    Attributes:
+        console (Console): Rich console for formatted output and logging
+        config_loader (ConfigLoader): Configuration management system
+        providers (Dict[str, BaseProvider]): Initialized provider instances
+        provider_info (Dict[str, ProviderInfo]): Provider metadata and capabilities
+        provider_metadata (Dict[str, Dict]): Additional provider configuration
+        proxy_config (Dict): Network proxy configuration
+        timeout_config (Dict): Request timeout settings
+        retry_config (Dict): Retry mechanism configuration
+    
+    Thread Safety:
+        This class is designed to be used with asyncio and is not thread-safe.
+        Create separate instances for use in different threads.
+    
+    Resource Management:
+        The client implements async context manager protocol for proper resource
+        cleanup. Always use within an async context manager or call close() manually.
+    """
 
     def __init__(
         self,
         config_dir: Optional[Path] = None,
         console: Optional[Console] = None,
     ):
-        """Initialize the unified LLM client.
+        """
+        Initialize the unified LLM client.
+        
+        Sets up the client with configuration loading, provider discovery,
+        and console output. The client will automatically load configuration
+        from the specified directory or use default locations.
 
         Args:
-            config_dir: Directory containing configuration files
-            console: Rich console for output (optional)
+            config_dir (Optional[Path]): Directory containing configuration files.
+                If None, uses default configuration directory (./config).
+            console (Optional[Console]): Rich console instance for formatted output.
+                If None, creates a new console instance.
+                
+        Raises:
+            ConfigurationError: If configuration files cannot be loaded or are invalid.
+            
+        Note:
+            Provider initialization happens during this call. Providers without
+            valid API keys will be skipped with warnings, but the client will
+            still initialize successfully.
         """
         self.console = console or Console()
         self.config_loader = ConfigLoader(config_dir)
@@ -55,7 +164,17 @@ class UnifiedLLMClient:
         self._load_configuration()
 
     def _load_configuration(self) -> None:
-        """Load configuration and initialize providers."""
+        """
+        Load configuration and initialize providers.
+        
+        This internal method handles the complete configuration loading process,
+        including provider metadata extraction, proxy settings, timeout configuration,
+        and retry settings. It then triggers provider initialization.
+        
+        Raises:
+            ConfigurationError: If configuration loading fails or configuration
+                files are malformed.
+        """
         try:
             config = self.config_loader.load_full_config()
 
@@ -75,7 +194,22 @@ class UnifiedLLMClient:
             raise ConfigurationError(f"Failed to load configuration: {e}")
 
     def _initialize_providers(self) -> None:
-        """Initialize all available providers."""
+        """
+        Initialize all available providers.
+        
+        This method attempts to initialize each configured provider by:
+        1. Looking up the provider implementation class
+        2. Extracting API keys and configuration from metadata
+        3. Creating provider instances with proper configuration
+        4. Handling initialization failures gracefully
+        
+        Providers that fail to initialize (e.g., missing API keys) are skipped
+        with warning messages, but do not prevent other providers from working.
+        
+        Note:
+            This method provides detailed console output about the initialization
+            process, including success/failure status for each provider.
+        """
         provider_classes = {
             "openai": OpenAIProvider,
             "anthropic": AnthropicProvider,
@@ -125,19 +259,56 @@ class UnifiedLLMClient:
                 )
 
     def list_providers(self) -> Dict[str, ProviderInfo]:
-        """List all available providers."""
+        """
+        List all available providers.
+        
+        Returns information about all configured providers, including both
+        successfully initialized providers and those that failed to initialize.
+        
+        Returns:
+            Dict[str, ProviderInfo]: Dictionary mapping provider IDs to their
+                information objects containing name, capabilities, and model lists.
+                
+        Example:
+            >>> client = UnifiedLLMClient()
+            >>> providers = client.list_providers()
+            >>> for provider_id, info in providers.items():
+            ...     print(f"{provider_id}: {info.name}")
+            ...     print(f"  Models: {list(info.models.keys())}")
+        """
         return self.provider_info
 
     def list_models(
         self, provider_id: Optional[str] = None
     ) -> Dict[str, Dict[str, ModelInfo]]:
-        """List all available models.
+        """
+        List all available models.
+        
+        Provides detailed information about models available across all providers
+        or for a specific provider. Each model entry includes capabilities,
+        limitations, and configuration options.
 
         Args:
-            provider_id: Optional provider ID to filter models
+            provider_id (Optional[str]): Optional provider ID to filter models.
+                If None, returns models from all providers.
 
         Returns:
-            Dictionary mapping provider IDs to their models
+            Dict[str, Dict[str, ModelInfo]]: Nested dictionary structure where:
+                - Outer keys are provider IDs
+                - Inner keys are model IDs
+                - Values are ModelInfo objects with model details
+                
+        Raises:
+            ModelNotFoundError: If the specified provider_id is not found.
+            
+        Example:
+            >>> # List all models
+            >>> all_models = client.list_models()
+            >>> 
+            >>> # List models for specific provider
+            >>> qwen_models = client.list_models("qwen")
+            >>> for model_id, model_info in qwen_models["qwen"].items():
+            ...     print(f"{model_id}: {model_info.name}")
         """
         if provider_id:
             if provider_id not in self.provider_info:
@@ -157,14 +328,35 @@ class UnifiedLLMClient:
     def get_model_info(
         self, model_id: str, provider_id: Optional[str] = None
     ) -> tuple[str, ModelInfo]:
-        """Get information about a specific model.
+        """
+        Get information about a specific model.
+        
+        Retrieves detailed information about a model, including its capabilities,
+        limitations, and configuration options. Can search within a specific
+        provider or across all providers.
 
         Args:
-            model_id: Model identifier
-            provider_id: Optional provider ID to search in
+            model_id (str): Model identifier to search for.
+            provider_id (Optional[str]): Optional provider ID to search within.
+                If None, searches across all providers.
 
         Returns:
-            Tuple of (provider_id, model_info)
+            tuple[str, ModelInfo]: Tuple containing:
+                - provider_id (str): ID of the provider that owns the model
+                - model_info (ModelInfo): Detailed model information object
+                
+        Raises:
+            ModelNotFoundError: If the model is not found in the specified
+                provider or across all providers.
+                
+        Example:
+            >>> # Find model in any provider
+            >>> provider_id, model_info = client.get_model_info("gpt-4o")
+            >>> print(f"Found in provider: {provider_id}")
+            >>> print(f"Max tokens: {model_info.max_tokens}")
+            >>> 
+            >>> # Find model in specific provider
+            >>> provider_id, model_info = client.get_model_info("qwen-plus", "qwen")
         """
         if provider_id:
             if provider_id not in self.provider_info:

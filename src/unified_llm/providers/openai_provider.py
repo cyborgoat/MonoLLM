@@ -1,20 +1,20 @@
 """OpenAI provider implementation."""
 
 import json
-from typing import List, Dict, Any, Optional, AsyncIterator
 import httpx
-from openai import AsyncOpenAI
+from typing import AsyncIterator, List, Dict, Any, Optional
 
-from .base import BaseProvider
-from ..core.models import (
-    Message,
+from unified_llm.core.models import (
     LLMResponse,
     StreamingResponse,
-    StreamChunk,
     RequestConfig,
+    Message,
     Usage,
+    StreamChunk,
 )
-from ..core.exceptions import ProviderError
+from unified_llm.core.exceptions import ProviderError
+from .base import BaseProvider
+from openai import AsyncOpenAI
 
 
 class OpenAIProvider(BaseProvider):

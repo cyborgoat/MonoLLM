@@ -1,11 +1,11 @@
-"""Base provider class for LLM implementations."""
+"""Base provider interface for the unified LLM framework."""
 
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Optional, AsyncIterator
 import httpx
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 
-from ..core.models import (
+from unified_llm.core.models import (
     Message, 
     LLMResponse, 
     StreamingResponse, 
@@ -16,7 +16,7 @@ from ..core.models import (
     TimeoutConfig,
     RetryConfig
 )
-from ..core.exceptions import (
+from unified_llm.core.exceptions import (
     ProviderError,
     AuthenticationError,
     RateLimitError,

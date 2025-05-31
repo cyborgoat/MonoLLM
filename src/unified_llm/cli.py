@@ -1,4 +1,65 @@
-"""Command-line interface for the unified LLM framework."""
+#!/usr/bin/env python3
+"""
+UnifiedLLM Command-Line Interface - Interactive CLI for LLM provider access.
+
+This module provides a comprehensive command-line interface for the UnifiedLLM
+framework, enabling users to interact with multiple Large Language Model providers
+through a unified set of commands. The CLI supports both interactive chat sessions
+and single-shot text generation with extensive configuration options.
+
+Key Features:
+    - Interactive chat sessions with conversation history
+    - Single-shot text generation with customizable parameters
+    - Provider and model discovery and listing
+    - Streaming and non-streaming response modes
+    - Support for reasoning models with thinking steps
+    - Rich terminal output with tables, panels, and markdown
+    - Comprehensive error handling and user feedback
+    - Configuration management through command-line options
+
+Available Commands:
+    - list-providers: Display all available LLM providers
+    - list-models: Show models available for each provider
+    - chat: Start an interactive chat session with a model
+    - generate: Generate a single response to a prompt
+
+Example Usage:
+    List all providers:
+        $ unified-llm list-providers
+
+    List models for a specific provider:
+        $ unified-llm list-models --provider qwen
+
+    Start an interactive chat:
+        $ unified-llm chat qwen-plus --temperature 0.7 --stream
+
+    Generate a single response:
+        $ unified-llm generate "Explain quantum computing" --model gpt-4o --thinking
+
+    Use with custom configuration:
+        $ unified-llm chat claude-3-sonnet --config-dir ./my-config
+
+Advanced Features:
+    - Streaming responses with real-time output
+    - Reasoning model support with thinking step display
+    - Conversation history management in chat mode
+    - Rich formatting with syntax highlighting
+    - Token usage tracking and display
+    - Comprehensive error messages with suggestions
+
+Configuration:
+    The CLI respects the same configuration files as the Python API:
+    - config/models.json: Model definitions and capabilities
+    - Environment variables for API keys
+    - Custom configuration directories via --config-dir
+
+Author: cyborgoat
+License: MIT License
+Copyright: (c) 2025 cyborgoat
+
+For more information, visit: https://github.com/cyborgoat/unified-llm
+Documentation: https://cyborgoat.github.io/unified-llm/cli.html
+"""
 
 import asyncio
 from pathlib import Path
@@ -9,19 +70,53 @@ from rich.table import Table
 from rich.panel import Panel
 from rich.markdown import Markdown
 
-from .core.client import UnifiedLLMClient
-from .core.models import RequestConfig, Message
-from .core.exceptions import UnifiedLLMError, ProviderError
+from unified_llm.core.client import UnifiedLLMClient
+from unified_llm.core.models import RequestConfig, Message
+from unified_llm.core.exceptions import UnifiedLLMError, ProviderError
 
-app = typer.Typer(help="Unified LLM Framework - Access multiple LLM providers with a single interface")
+# Initialize the main CLI application with help text
+app = typer.Typer(
+    help="Unified LLM Framework - Access multiple LLM providers with a single interface",
+    add_completion=False,
+    rich_markup_mode="rich",
+    context_settings={"help_option_names": ["-h", "--help"]},
+)
+
+# Initialize Rich console for beautiful terminal output
 console = Console()
 
 
 @app.command()
 def list_providers(
-    config_dir: Optional[Path] = typer.Option(None, "--config-dir", "-c", help="Configuration directory")
+    config_dir: Optional[Path] = typer.Option(
+        None, 
+        "--config-dir", 
+        "-c", 
+        help="Configuration directory path. Defaults to ./config if not specified."
+    )
 ):
-    """List all available LLM providers."""
+    """
+    List all available LLM providers.
+    
+    Displays a comprehensive table showing all configured LLM providers,
+    their capabilities, and connection status. This command helps users
+    understand which providers are available and their features.
+    
+    The table includes:
+    - Provider ID: Internal identifier used in commands
+    - Name: Human-readable provider name
+    - Base URL: API endpoint URL
+    - OpenAI Protocol: Whether the provider uses OpenAI-compatible API
+    - Streaming: Support for real-time streaming responses
+    - MCP: Model Context Protocol support
+    
+    Examples:
+        List all providers:
+            $ unified-llm list-providers
+            
+        Use custom configuration directory:
+            $ unified-llm list-providers --config-dir ./my-config
+    """
     try:
         client = UnifiedLLMClient(config_dir=config_dir, console=console)
         providers = client.list_providers()
@@ -53,10 +148,45 @@ def list_providers(
 
 @app.command()
 def list_models(
-    provider: Optional[str] = typer.Option(None, "--provider", "-p", help="Filter by provider"),
-    config_dir: Optional[Path] = typer.Option(None, "--config-dir", "-c", help="Configuration directory")
+    provider: Optional[str] = typer.Option(
+        None, 
+        "--provider", 
+        "-p", 
+        help="Filter models by specific provider ID. Shows all providers if not specified."
+    ),
+    config_dir: Optional[Path] = typer.Option(
+        None, 
+        "--config-dir", 
+        "-c", 
+        help="Configuration directory path. Defaults to ./config if not specified."
+    )
 ):
-    """List all available models."""
+    """
+    List all available models.
+    
+    Displays detailed information about models available across all providers
+    or for a specific provider. Each model entry shows its capabilities,
+    limitations, and supported features.
+    
+    The table includes:
+    - Model ID: Identifier used in generation commands
+    - Name: Human-readable model name
+    - Max Tokens: Maximum output token limit
+    - Temperature: Support for creativity/randomness control
+    - Streaming: Real-time response streaming capability
+    - Reasoning: Whether the model supports reasoning tasks
+    - Thinking: Support for showing internal reasoning steps
+    
+    Examples:
+        List all models:
+            $ unified-llm list-models
+            
+        List models for specific provider:
+            $ unified-llm list-models --provider qwen
+            
+        Use custom configuration:
+            $ unified-llm list-models --provider openai --config-dir ./my-config
+    """
     try:
         client = UnifiedLLMClient(config_dir=config_dir, console=console)
         models = client.list_models(provider_id=provider)
@@ -95,14 +225,74 @@ def list_models(
 @app.command()
 def chat(
     model: str = typer.Argument(..., help="Model to use (e.g., gpt-4o, claude-3-5-sonnet-20241022)"),
-    provider: Optional[str] = typer.Option(None, "--provider", "-p", help="Specific provider to use"),
-    temperature: Optional[float] = typer.Option(None, "--temperature", "-t", help="Temperature (0.0-2.0)"),
-    max_tokens: Optional[int] = typer.Option(None, "--max-tokens", "-m", help="Maximum output tokens"),
-    stream: bool = typer.Option(False, "--stream", "-s", help="Enable streaming"),
-    show_thinking: bool = typer.Option(False, "--thinking", help="Show thinking steps for reasoning models"),
-    config_dir: Optional[Path] = typer.Option(None, "--config-dir", "-c", help="Configuration directory"),
+    provider: Optional[str] = typer.Option(
+        None, 
+        "--provider", 
+        "-p", 
+        help="Specific provider to use. Auto-detected if not specified."
+    ),
+    temperature: Optional[float] = typer.Option(
+        None, 
+        "--temperature", 
+        "-t", 
+        help="Temperature for response creativity (0.0-2.0). Lower = more focused, higher = more creative."
+    ),
+    max_tokens: Optional[int] = typer.Option(
+        None, 
+        "--max-tokens", 
+        "-m", 
+        help="Maximum number of tokens in the response. Uses model default if not specified."
+    ),
+    stream: bool = typer.Option(
+        False, 
+        "--stream", 
+        "-s", 
+        help="Enable streaming responses for real-time output."
+    ),
+    show_thinking: bool = typer.Option(
+        False, 
+        "--thinking", 
+        help="Show thinking steps for reasoning models (o1, qwq, deepseek-r1)."
+    ),
+    config_dir: Optional[Path] = typer.Option(
+        None, 
+        "--config-dir", 
+        "-c", 
+        help="Configuration directory path. Defaults to ./config if not specified."
+    ),
 ):
-    """Interactive chat with an LLM model."""
+    """
+    Interactive chat with an LLM model.
+    
+    Starts an interactive chat session with the specified model, maintaining
+    conversation history and providing a rich terminal interface. The chat
+    supports multiple turns, streaming responses, and special commands.
+    
+    Special Commands:
+    - 'exit': Quit the chat session
+    - 'clear': Clear conversation history
+    
+    Features:
+    - Persistent conversation history within the session
+    - Real-time streaming responses (with --stream)
+    - Thinking step display for reasoning models (with --thinking)
+    - Rich markdown formatting for responses
+    - Token usage tracking and display
+    - Comprehensive error handling with helpful messages
+    
+    Examples:
+        Basic chat:
+            $ unified-llm chat gpt-4o
+            
+        Chat with streaming and custom temperature:
+            $ unified-llm chat qwen-plus --stream --temperature 0.8
+            
+        Reasoning model with thinking steps:
+            $ unified-llm chat qwq-32b --thinking --max-tokens 2000
+            
+        Specify provider explicitly:
+            $ unified-llm chat claude-3-sonnet --provider anthropic
+    """
     async def async_chat():
         try:
             client = UnifiedLLMClient(config_dir=config_dir, console=console)

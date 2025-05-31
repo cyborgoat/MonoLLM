@@ -6,8 +6,8 @@ from pathlib import Path
 from typing import Dict, Any, Optional
 from dotenv import load_dotenv
 
-from ..core.exceptions import ConfigurationError
-from ..core.models import (
+from unified_llm.core.exceptions import ConfigurationError
+from unified_llm.core.models import (
     ProviderInfo,
     ModelInfo,
     ProxyConfig,
