@@ -1,4 +1,4 @@
-.. UnifiedLLM documentation master file, created by
+.. MonoLLM documentation master file, created by
    sphinx-quickstart on Sun Jun  1 00:02:09 2025.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
@@ -84,7 +84,7 @@ A powerful framework that provides a unified interface for multiple LLM provider
      - ✅ Yes
 
 ⚡ **Quick Start**
------------------
+------------------
 
 Installation
 ~~~~~~~~~~~~
@@ -108,7 +108,7 @@ Basic Usage
 .. code-block:: python
 
    import asyncio
-   from unified_llm import UnifiedLLMClient, RequestConfig
+   from monollm import UnifiedLLMClient, RequestConfig
 
    async def main():
        async with UnifiedLLMClient() as client:
@@ -164,6 +164,8 @@ CLI Usage
    :caption: API Reference
 
    api/client
+   api/models
+   api/exceptions
 
 .. toctree::
    :maxdepth: 2
@@ -179,7 +181,7 @@ CLI Usage
 * **GitHub Repository**: https://github.com/cyborgoat/MonoLLM
 * **Issue Tracker**: https://github.com/cyborgoat/MonoLLM/issues
 * **Discussions**: https://github.com/cyborgoat/MonoLLM/discussions
-* **PyPI Package**: https://pypi.org/project/unified-llm/ *(coming soon)*
+* **PyPI Package**: https://pypi.org/project/monollm/ *(coming soon)*
 
 📄 **License**
 --------------

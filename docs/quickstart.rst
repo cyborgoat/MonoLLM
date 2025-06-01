@@ -41,37 +41,24 @@ Let's create your first text generation:
    from monollm import UnifiedLLMClient, RequestConfig
 
    async def main():
-       # Initialize the client
        async with UnifiedLLMClient() as client:
-           # Configure the request
            config = RequestConfig(
-               model="qwq-32b",  # Qwen's reasoning model
+               model="gpt-4o",
                temperature=0.7,
-               max_tokens=500,
+               max_tokens=100,
            )
            
-           # Generate response
            response = await client.generate(
-               "Explain the concept of machine learning in simple terms.",
+               "Explain quantum computing briefly.",
                config
            )
            
-           # Print the result
-           print("Response:", response.content)
-           print(f"Provider: {response.provider}")
-           print(f"Model: {response.model}")
-           
+           print(f"Content: {response.content}")
            if response.usage:
                print(f"Tokens used: {response.usage.total_tokens}")
+               print(f"Cost estimate: ${response.usage.total_tokens * 0.00001:.5f}")
 
-   # Run the example
    asyncio.run(main())
-
-Save this as ``first_example.py`` and run:
-
-.. code-block:: bash
-
-   python first_example.py
 
 Streaming Responses
 -------------------
@@ -83,28 +70,24 @@ For real-time responses, use streaming:
    import asyncio
    from monollm import UnifiedLLMClient, RequestConfig
 
-   async def streaming_example():
+   async def main():
        async with UnifiedLLMClient() as client:
            config = RequestConfig(
-               model="qwen-plus",
-               stream=True,  # Enable streaming
+               model="gpt-4o",
+               stream=True,
+               temperature=0.7,
            )
            
-           print("Streaming response: ", end="", flush=True)
-           
-           streaming_response = await client.generate_stream(
-               "Tell me a short story about a robot learning to paint.",
+           async for chunk in await client.generate_stream(
+               "Tell me a short story about a robot.",
                config
-           )
-           
-           # Process each chunk as it arrives
-           async for chunk in streaming_response:
+           ):
                if chunk.content:
                    print(chunk.content, end="", flush=True)
            
-           print("\n")  # New line after streaming
+           print()  # New line after streaming
 
-   asyncio.run(streaming_example())
+   asyncio.run(main())
 
 Using Reasoning Models
 ----------------------
@@ -116,29 +99,25 @@ Qwen's QwQ model can show its reasoning process:
    import asyncio
    from monollm import UnifiedLLMClient, RequestConfig
 
-   async def reasoning_example():
+   async def main():
        async with UnifiedLLMClient() as client:
            config = RequestConfig(
-               model="qwq-32b",
-               show_thinking=True,  # Show reasoning steps
-               max_tokens=1000,
+               model="qwq-32b",  # Qwen's reasoning model
+               temperature=0.1,
+               max_tokens=2000,
            )
            
            response = await client.generate(
-               "If a train travels 120 miles in 2 hours, and then 180 miles in 3 hours, what is its average speed for the entire journey?",
+               "Solve this step by step: If a train travels 120 km in 2 hours, what is its average speed?",
                config
            )
            
-           # Show the thinking process
+           print("Response:", response.content)
            if response.thinking:
-               print("🤔 Thinking process:")
+               print("\nThinking process:")
                print(response.thinking)
-               print("\n" + "="*50 + "\n")
-           
-           print("📝 Final answer:")
-           print(response.content)
 
-   asyncio.run(reasoning_example())
+   asyncio.run(main())
 
 Multi-turn Conversations
 ------------------------
@@ -150,32 +129,24 @@ Build conversations with context:
    import asyncio
    from monollm import UnifiedLLMClient, RequestConfig, Message
 
-   async def conversation_example():
+   async def main():
        async with UnifiedLLMClient() as client:
-           config = RequestConfig(model="qwen-plus")
-           
-           # Start with a system message and user question
            messages = [
-               Message(role="system", content="You are a helpful math tutor."),
-               Message(role="user", content="What is 15 × 23?"),
+               Message(role="system", content="You are a helpful assistant."),
+               Message(role="user", content="What is Python?"),
+               Message(role="assistant", content="Python is a high-level programming language..."),
+               Message(role="user", content="Can you give me a simple example?"),
            ]
            
-           # Get first response
-           response = await client.generate(messages, config)
-           print("Tutor:", response.content)
+           config = RequestConfig(
+               model="claude-3-sonnet",
+               temperature=0.7,
+           )
            
-           # Continue the conversation
-           messages.append(Message(role="assistant", content=response.content))
-           messages.append(Message(
-               role="user", 
-               content="Can you show me how to calculate that step by step?"
-           ))
-           
-           # Get follow-up response
            response = await client.generate(messages, config)
-           print("Tutor:", response.content)
+           print(response.content)
 
-   asyncio.run(conversation_example())
+   asyncio.run(main())
 
 Command Line Interface
 ----------------------
@@ -228,26 +199,17 @@ You can easily switch between providers:
    import asyncio
    from monollm import UnifiedLLMClient, RequestConfig
 
-   async def multi_provider_example():
+   async def main():
        async with UnifiedLLMClient() as client:
-           prompt = "What is the capital of France?"
-           
-           # Try different providers
-           providers_models = [
-               ("qwen", "qwen-plus"),
-               ("anthropic", "claude-3-5-sonnet-20241022"),
-               ("openai", "gpt-4o"),
-           ]
-           
-           for provider, model in providers_models:
-               try:
-                   config = RequestConfig(model=model)
-                   response = await client.generate(prompt, config)
-                   print(f"{provider.upper()}: {response.content[:100]}...")
-               except Exception as e:
-                   print(f"{provider.upper()}: Error - {e}")
+           # List all available providers
+           providers = await client.list_providers()
+           for provider in providers:
+               print(f"Provider: {provider.name}")
+               print(f"  Status: {provider.status}")
+               print(f"  Models: {len(provider.models)}")
+               print()
 
-   asyncio.run(multi_provider_example())
+   asyncio.run(main())
 
 Error Handling
 --------------
@@ -280,27 +242,18 @@ Best Practices
 --------------
 
 1. **Use async context managers**: Always use ``async with UnifiedLLMClient()`` for proper resource management.
-
-2. **Handle errors gracefully**: Wrap API calls in try-catch blocks.
-
-3. **Set reasonable limits**: Use ``max_tokens`` to control costs and response length.
-
-4. **Choose the right model**: Use reasoning models for complex problems, regular models for simple tasks.
-
-5. **Use streaming for long responses**: Improve user experience with real-time output.
-
-6. **Store API keys securely**: Use environment variables or secure key management.
+2. **Handle exceptions**: Wrap calls in try-catch blocks for production use.
+3. **Monitor usage**: Track token usage and costs.
+4. **Configure timeouts**: Set appropriate timeouts for your use case.
+5. **Use streaming**: For long responses, use streaming to improve user experience.
 
 Next Steps
 ----------
 
-Now that you're familiar with the basics, explore:
-
-* :doc:`configuration` - Advanced configuration options
-* :doc:`providers` - Detailed provider documentation
-* :doc:`examples` - More comprehensive examples
-* :doc:`api/client` - Complete API reference
-* :doc:`cli` - Full CLI documentation
+- Read the :doc:`configuration` guide to set up providers
+- Explore :doc:`examples` for more advanced usage patterns
+- Check out the :doc:`cli` for command-line usage
+- Review the API reference for detailed documentation
 
 Common Use Cases
 ----------------

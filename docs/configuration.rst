@@ -1,7 +1,7 @@
 Configuration
 =============
 
-UnifiedLLM provides flexible configuration options through environment variables, configuration files, and runtime parameters.
+MonoLLM provides flexible configuration options through environment variables, configuration files, and runtime parameters.
 
 Environment Variables
 ---------------------
@@ -57,7 +57,7 @@ Configure HTTP/SOCKS5 proxies:
 Configuration Files
 -------------------
 
-UnifiedLLM uses JSON configuration files stored in the ``config/`` directory.
+MonoLLM uses JSON configuration files stored in the ``config/`` directory.
 
 Directory Structure
 ~~~~~~~~~~~~~~~~~~~
@@ -164,7 +164,7 @@ Configure individual requests:
 
 .. code-block:: python
 
-   from unified_llm import RequestConfig
+   from monollm import RequestConfig
 
    config = RequestConfig(
        model="qwq-32b",
@@ -185,14 +185,14 @@ Configure the client instance:
 
    from pathlib import Path
    from rich.console import Console
-   from unified_llm import UnifiedLLMClient
+   from monollm import UnifiedLLMClient
 
    # Custom configuration directory
    client = UnifiedLLMClient(
-       config_dir=Path("./my_config")
+       config_dir="./my_config"
    )
 
-   # Custom console for logging
+   # Custom console for rich output
    console = Console()
    client = UnifiedLLMClient(console=console)
 
@@ -206,7 +206,7 @@ Add or modify provider configurations programmatically:
 
 .. code-block:: python
 
-   from unified_llm.core.models import ProviderConfig, ModelInfo
+   from monollm.core.models import ProviderConfig, ModelInfo
 
    # Create custom provider config
    provider_config = ProviderConfig(
@@ -255,21 +255,21 @@ Load the environment file in your application:
    from dotenv import load_dotenv
    load_dotenv()  # Load .env file
 
-   from unified_llm import UnifiedLLMClient
+   from monollm import UnifiedLLMClient
 
 Configuration Validation
 -------------------------
 
-UnifiedLLM validates configurations at startup and provides helpful error messages:
+MonoLLM validates configurations at startup and provides helpful error messages:
 
 .. code-block:: python
 
-   from unified_llm import UnifiedLLMClient
-   from unified_llm.core.exceptions import ConfigurationError
+   from monollm import UnifiedLLMClient
+   from monollm.core.exceptions import ConfigurationError
 
    try:
        async with UnifiedLLMClient() as client:
-           # Configuration is validated here
+           # Configuration will be validated here
            pass
    except ConfigurationError as e:
        print(f"Configuration error: {e}")
@@ -305,14 +305,14 @@ Multi-Environment Configuration
 .. code-block:: python
 
    import os
-   from unified_llm import UnifiedLLMClient
+   from monollm import UnifiedLLMClient
 
-   # Different configs based on environment
-   env = os.getenv("ENVIRONMENT", "development")
+   # Different environments
+   environment = os.getenv("ENVIRONMENT", "development")
 
-   if env == "production":
+   if environment == "production":
        client = UnifiedLLMClient(config_dir="./config/production")
-   elif env == "staging":
+   elif environment == "staging":
        client = UnifiedLLMClient(config_dir="./config/staging")
    else:
        client = UnifiedLLMClient(config_dir="./config/development")
@@ -320,7 +320,7 @@ Multi-Environment Configuration
 Configuration Priority
 ----------------------
 
-UnifiedLLM loads configuration in the following order (later sources override earlier ones):
+MonoLLM loads configuration in the following order (later sources override earlier ones):
 
 1. **Default values** - Built-in defaults
 2. **Configuration files** - JSON files in config directory
@@ -377,7 +377,7 @@ Enable debug logging to see configuration loading:
    import logging
    logging.basicConfig(level=logging.DEBUG)
 
-   from unified_llm import UnifiedLLMClient
+   from monollm import UnifiedLLMClient
 
    # Debug logs will show configuration loading process
    client = UnifiedLLMClient()
@@ -389,7 +389,7 @@ Validate your configuration before using:
 
 .. code-block:: python
 
-   from unified_llm import UnifiedLLMClient
+   from monollm import UnifiedLLMClient
 
    async def validate_config():
        try:

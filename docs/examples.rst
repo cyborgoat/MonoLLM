@@ -1,7 +1,7 @@
 Examples
 ========
 
-This page provides comprehensive examples of using UnifiedLLM for various tasks and scenarios.
+This page provides comprehensive examples of using MonoLLM for various tasks and scenarios.
 
 Basic Examples
 --------------
@@ -639,7 +639,7 @@ CLI Application
 
    #!/usr/bin/env python3
    """
-   Simple CLI application using UnifiedLLM
+   Simple CLI application using MonoLLM
    """
    import asyncio
    import argparse
@@ -650,7 +650,7 @@ CLI Application
        async with UnifiedLLMClient() as client:
            config = RequestConfig(model="qwen-plus")
            
-           print("UnifiedLLM Interactive Chat")
+           print("MonoLLM Interactive Chat")
            print("Type 'quit' to exit")
            print("-" * 30)
            
@@ -690,7 +690,7 @@ CLI Application
            print(response.content)
 
    def main():
-       parser = argparse.ArgumentParser(description="UnifiedLLM CLI")
+       parser = argparse.ArgumentParser(description="MonoLLM CLI")
        parser.add_argument("--interactive", "-i", action="store_true", 
                           help="Start interactive chat")
        parser.add_argument("--prompt", "-p", type=str, 
@@ -722,4 +722,4 @@ Best Practices
 7. **Cache responses** when appropriate to reduce API calls
 8. **Monitor usage** and implement rate limiting if needed
 
-These examples demonstrate the flexibility and power of UnifiedLLM across various use cases. Adapt them to your specific needs and requirements. 
+These examples demonstrate the flexibility and power of MonoLLM across various use cases. Adapt them to your specific needs and requirements. 
