@@ -5,6 +5,84 @@ All notable changes to MonoLLM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] - 2025-06-01
+
+### Added
+- **Machine Interface & JSON API**: Comprehensive machine-friendly interface for programmatic usage
+  - `--machine` flag for all CLI commands to output structured JSON
+  - Consistent JSON response format with timestamps and error handling
+  - Streaming JSON output with line-by-line chunks for real-time processing
+  - Complete API coverage for all CLI operations
+- **Tauri Sidecar Integration**: Perfect integration for desktop applications
+  - Rust, Python, and JavaScript integration examples
+  - Asynchronous and synchronous execution patterns
+  - Streaming response handling for real-time UI updates
+- **Enhanced CLI Commands**: Expanded command set with dual interface support
+  - `generate-stream`: Machine-only streaming command with JSON chunks
+  - `chat-api`: Multi-turn conversation API for programmatic usage
+  - `validate-config`: Parameter validation before API calls
+  - `env-info`: Environment and configuration information
+  - `set-defaults`: Persistent model defaults management
+  - `proxy-config`: HTTP/HTTPS/SOCKS proxy configuration
+- **Configuration Management**: Persistent configuration system
+  - Model-specific defaults stored in `config/user_defaults.json`
+  - Proxy configuration in `config/proxy.json`
+  - Parameter precedence: CLI args > defaults > model requirements
+  - Configuration validation and automatic adjustment
+- **Modular CLI Architecture**: Clean separation of concerns
+  - `user_interface.py`: Rich, human-friendly interface
+  - `machine_interface.py`: JSON-based programmatic interface
+  - `config_manager.py`: Configuration and model management
+  - `output_formatter.py`: Dual-mode output formatting
+  - `main.py`: Unified command entry point
+
+### Enhanced
+- **CLI User Experience**: Rich terminal interface with beautiful formatting
+  - Interactive chat sessions with conversation history
+  - Rich tables and panels for information display
+  - Progress indicators and streaming output
+  - Comprehensive error messages with context
+- **Output Formatting**: Dual-mode formatting system
+  - User mode: Rich tables, panels, markdown rendering
+  - Machine mode: Structured JSON with consistent schema
+  - Error handling with detailed context and suggestions
+- **Parameter Management**: Advanced parameter handling
+  - Automatic validation against model capabilities
+  - Temperature and token limit enforcement
+  - Stream-only model detection and handling
+  - Default value management per model
+
+### Documentation
+- **README-MACHINE.md**: Comprehensive machine interface documentation
+  - Complete API reference with examples
+  - Integration guides for Rust, Python, JavaScript
+  - Error handling and troubleshooting
+  - Performance and security considerations
+- **MACHINE-QUICK-REFERENCE.md**: Concise quick reference card
+  - Command summary with examples
+  - JSON response format reference
+  - Integration code snippets
+- **Updated CLI Documentation**: Enhanced with machine interface examples
+  - Tauri sidecar integration examples
+  - Configuration management guide
+  - Advanced usage patterns
+
+### Changed
+- **CLI Module Structure**: Reorganized for better maintainability
+  - Replaced monolithic `cli.py` with modular architecture
+  - Clear separation between user and machine interfaces
+  - Improved code organization and testability
+- **Command Interface**: Enhanced command set with consistent patterns
+  - All commands support both user and machine modes
+  - Consistent parameter naming and behavior
+  - Improved help system and documentation
+
+### Fixed
+- **Configuration Persistence**: Reliable configuration management
+  - Proper file handling and error recovery
+  - Atomic configuration updates
+  - Cross-platform compatibility
+
 ## [0.1.2] - 2025-06-01
 
 ### Added

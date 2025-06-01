@@ -118,7 +118,45 @@ monollm list-models --provider qwen
 - **🚀 [Quick Start Guide](https://cyborgoat.github.io/MonoLLM/quickstart.html)** - Get up and running in minutes
 - **⚙️ [Configuration Guide](https://cyborgoat.github.io/MonoLLM/configuration.html)** - Advanced configuration options
 - **💻 [CLI Documentation](https://cyborgoat.github.io/MonoLLM/cli.html)** - Command-line interface guide
+- **🤖 [Machine Interface](src/monollm/cli/README-MACHINE.md)** - JSON API for programmatic usage and Tauri sidecars
 - **🔧 [Examples](https://cyborgoat.github.io/MonoLLM/examples.html)** - Practical usage examples
+
+## 🤖 Machine Interface & Tauri Integration
+
+MonoLLM provides a powerful machine-friendly JSON API perfect for integration with external applications, automation scripts, and Tauri sidecars:
+
+```bash
+# All commands support --machine flag for JSON output
+monollm list-providers --machine
+monollm generate "Hello world" --model gpt-4o --machine
+monollm generate-stream "Tell a story" --model qwq-32b --thinking
+```
+
+### Tauri Sidecar Example
+
+```rust
+// Rust code for Tauri app
+use std::process::Command;
+
+let output = Command::new("monollm")
+    .args(&["generate", "What is AI?", "--model", "gpt-4o", "--machine"])
+    .output()
+    .expect("Failed to execute command");
+
+let response: serde_json::Value = serde_json::from_slice(&output.stdout)?;
+println!("AI Response: {}", response["content"]);
+```
+
+### Key Machine Interface Features
+
+- **🔄 Structured JSON**: All responses in consistent JSON format
+- **📡 Streaming Support**: Real-time JSON chunks for streaming responses  
+- **⚙️ Configuration API**: Programmatic model defaults and proxy management
+- **🛡️ Error Handling**: Consistent error format with detailed context
+- **🔧 Validation**: Parameter validation before API calls
+- **📊 Usage Tracking**: Token usage and performance metrics
+
+**📖 [Complete Machine Interface Documentation](src/monollm/cli/README-MACHINE.md)**
 
 ## 🎯 Use Cases
 

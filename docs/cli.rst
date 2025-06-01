@@ -298,6 +298,169 @@ Performance Tips
 Integration with Other Tools
 ----------------------------
 
+Machine Interface & JSON API
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+MonoLLM provides a powerful machine-friendly JSON API perfect for integration with external applications, automation scripts, and Tauri sidecars. Use the ``--machine`` flag to get structured JSON output:
+
+.. code-block:: bash
+
+   # Basic JSON output
+   monollm list-providers --machine
+   monollm generate "Hello world" --model gpt-4o --machine
+
+**JSON Response Format:**
+
+.. code-block:: json
+
+   {
+     "content": "Hello! How can I help you today?",
+     "model": "gpt-4o",
+     "provider": "openai",
+     "timestamp": "2025-01-01T12:00:00.000000",
+     "usage": {
+       "prompt_tokens": 8,
+       "completion_tokens": 12,
+       "total_tokens": 20
+     }
+   }
+
+**Error Format:**
+
+.. code-block:: json
+
+   {
+     "error": true,
+     "error_type": "ProviderError",
+     "error_message": "API key not found",
+     "timestamp": "2025-01-01T12:00:00.000000",
+     "context": "generate"
+   }
+
+**Available Machine Commands:**
+
+.. code-block:: bash
+
+   # Information commands
+   monollm list-providers --machine
+   monollm list-models --machine
+   monollm model-config qwq-32b --machine
+   monollm env-info --machine
+
+   # Configuration commands
+   monollm set-defaults qwq-32b --temperature 0.8 --thinking --machine
+   monollm proxy-config --show --machine
+   monollm validate-config qwq-32b --temperature 0.8
+
+   # Generation commands
+   monollm generate "prompt" --model gpt-4o --machine
+   monollm generate-stream "prompt" --model qwq-32b --thinking
+   monollm chat-api '[{"role": "user", "content": "Hello"}]' --model gpt-4o
+
+**Streaming JSON Output:**
+
+.. code-block:: bash
+
+   # Outputs one JSON object per line
+   monollm generate-stream "Tell a story" --model qwq-32b --thinking
+
+.. code-block:: json
+
+   {"type": "chunk", "content": "Once", "is_complete": false, "timestamp": "..."}
+   {"type": "chunk", "content": " upon", "is_complete": false, "timestamp": "..."}
+   {"type": "chunk", "thinking": "I should create...", "timestamp": "..."}
+   {"type": "chunk", "is_complete": true, "timestamp": "..."}
+
+Tauri Sidecar Integration
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Perfect for desktop applications built with Tauri:
+
+**Rust Example:**
+
+.. code-block:: rust
+
+   use serde_json::Value;
+   use std::process::Command;
+
+   // Synchronous execution
+   fn generate_response(prompt: &str, model: &str) -> Result<Value, Box<dyn std::error::Error>> {
+       let output = Command::new("monollm")
+           .args(&["generate", prompt, "--model", model, "--machine"])
+           .output()?;
+       
+       if output.status.success() {
+           let result: Value = serde_json::from_slice(&output.stdout)?;
+           Ok(result)
+       } else {
+           let error: Value = serde_json::from_slice(&output.stderr)?;
+           Err(format!("Generation failed: {}", error).into())
+       }
+   }
+
+   // Usage
+   let response = generate_response("What is AI?", "gpt-4o")?;
+   println!("Response: {}", response["content"]);
+
+**JavaScript/Node.js Example:**
+
+.. code-block:: javascript
+
+   const { exec } = require('child_process');
+   const { promisify } = require('util');
+   const execAsync = promisify(exec);
+
+   async function generateResponse(prompt, model) {
+       const cmd = `monollm generate "${prompt}" --model ${model} --machine`;
+       const { stdout } = await execAsync(cmd);
+       return JSON.parse(stdout);
+   }
+
+   // Usage
+   const response = await generateResponse("What is quantum computing?", "gpt-4o");
+   console.log(response.content);
+
+**Python Integration:**
+
+.. code-block:: python
+
+   import subprocess
+   import json
+
+   def generate_response(prompt, model):
+       result = subprocess.run([
+           "monollm", "generate", prompt, 
+           "--model", model, "--machine"
+       ], capture_output=True, text=True)
+       
+       if result.returncode == 0:
+           return json.loads(result.stdout)
+       else:
+           error = json.loads(result.stderr)
+           raise Exception(f"Generation failed: {error['error_message']}")
+
+   # Usage
+   response = generate_response("Explain AI", "gpt-4o")
+   print(response["content"])
+
+Configuration Management API
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Programmatically manage model defaults and proxy settings:
+
+.. code-block:: bash
+
+   # Set model defaults
+   monollm set-defaults qwq-32b --temperature 0.8 --thinking --stream --machine
+
+   # Configure proxy
+   monollm proxy-config --http http://proxy:8080 --machine
+
+   # Validate configuration
+   monollm validate-config qwq-32b --temperature 0.8 --stream false
+
+**Complete Machine Interface Documentation:** `src/monollm/cli/README-MACHINE.md <../src/monollm/cli/README-MACHINE.md>`_
+
 Pipe Output
 ~~~~~~~~~~~
 

@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "monollm"
-version = "0.1.2"
-description = "A unified framework for accessing multiple LLM providers"
+version = "0.1.3"
+description = "A unified framework for accessing multiple LLM providers with comprehensive CLI and machine interface"
 readme = "README.md"
 license = "MIT"
 authors = [

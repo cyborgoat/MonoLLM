@@ -1,0 +1,10 @@
+{
+  "model_defaults": {
+    "qwq-32b": {
+      "temperature": 0.8,
+      "max_tokens": null,
+      "stream": true,
+      "show_thinking": true
+    }
+  }
+}
