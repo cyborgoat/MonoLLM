@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-UnifiedLLM Client - Main interface for unified LLM provider access.
+MonoLLM Client - Main interface for unified LLM provider access.
 
-This module provides the primary client interface for the UnifiedLLM framework,
+This module provides the primary client interface for the MonoLLM framework,
 enabling seamless access to multiple Large Language Model providers through a
 single, consistent API.
 
@@ -60,8 +60,8 @@ Author: cyborgoat
 License: MIT License
 Copyright: (c) 2025 cyborgoat
 
-For more information, visit: https://github.com/cyborgoat/unified-llm
-Documentation: https://cyborgoat.github.io/unified-llm/
+For more information, visit: https://github.com/cyborgoat/MonoLLM
+Documentation: https://cyborgoat.github.io/MonoLLM/
 """
 
 import uuid

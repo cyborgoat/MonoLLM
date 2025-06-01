@@ -2,10 +2,7 @@
 """
 MonoLLM Core Models - Data structures and type definitions.
 
-This module defines the core data models and type definitions used throughout
-the MonoLLM framework. It provides Pydantic-based models for configuration,
-requests, responses, and metadata, ensuring type safety and data validation
-across the entire system.
+This module defines the core data models and type definitions for the MonoLLM framework. It provides Pydantic-based models for configuration, request/response payloads, and usage tracking.
 
 Key Components:
     - Model and Provider Information: Metadata about LLM models and providers
@@ -50,8 +47,8 @@ Author: cyborgoat
 License: MIT License
 Copyright: (c) 2025 cyborgoat
 
-For more information, visit: https://github.com/cyborgoat/unified-llm
-Documentation: https://cyborgoat.github.io/unified-llm/api/models.html
+For more information, visit: https://github.com/cyborgoat/MonoLLM
+Documentation: https://cyborgoat.github.io/MonoLLM/api/models.html
 """
 
 from datetime import datetime

@@ -1,12 +1,12 @@
 Client API
 ==========
 
-The :class:`~unified_llm.core.client.UnifiedLLMClient` is the main entry point for interacting with multiple LLM providers through a unified interface.
+The :class:`~monollm.core.client.UnifiedLLMClient` is the main entry point for interacting with multiple LLM providers through a unified interface.
 
 UnifiedLLMClient
 ----------------
 
-.. autoclass:: unified_llm.core.client.UnifiedLLMClient
+.. autoclass:: monollm.core.client.UnifiedLLMClient
    :members:
    :undoc-members:
    :show-inheritance:
@@ -20,7 +20,7 @@ Basic Usage
 .. code-block:: python
 
    import asyncio
-   from unified_llm import UnifiedLLMClient, RequestConfig
+   from monollm import UnifiedLLMClient, RequestConfig
 
    async def main():
        async with UnifiedLLMClient() as client:
@@ -113,7 +113,7 @@ Multi-turn Conversations
 
 .. code-block:: python
 
-   from unified_llm import Message
+   from monollm import Message
 
    async with UnifiedLLMClient() as client:
        config = RequestConfig(model="qwen-plus")
@@ -136,14 +136,14 @@ Error Handling
 
 .. code-block:: python
 
-   from unified_llm.core.exceptions import UnifiedLLMError, ProviderError
+   from monollm.core.exceptions import MonoLLMError, ProviderError
 
    async with UnifiedLLMClient() as client:
        try:
            config = RequestConfig(model="invalid-model")
            response = await client.generate("Hello", config)
-       except UnifiedLLMError as e:
-           print(f"UnifiedLLM error: {e}")
+       except MonoLLMError as e:
+           print(f"MonoLLM error: {e}")
        except ProviderError as e:
            print(f"Provider error: {e}")
 

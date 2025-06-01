@@ -1,7 +1,7 @@
 Quick Start Guide
 =================
 
-This guide will get you up and running with UnifiedLLM in just a few minutes.
+This guide will get you up and running with MonoLLM in just a few minutes.
 
 Prerequisites
 -------------
@@ -9,7 +9,7 @@ Prerequisites
 Before you begin, make sure you have:
 
 1. **Python 3.13+** installed
-2. **UnifiedLLM** installed (see :doc:`installation`)
+2. **MonoLLM** installed (see :doc:`installation`)
 3. **API keys** for at least one provider
 
 Setting Up Your First Provider
@@ -28,7 +28,7 @@ Let's start with Qwen, which offers excellent reasoning capabilities:
 
    .. code-block:: bash
 
-      unified-llm list-providers
+      monollm list-providers
 
 Your First Generation
 ---------------------
@@ -38,7 +38,7 @@ Let's create your first text generation:
 .. code-block:: python
 
    import asyncio
-   from unified_llm import UnifiedLLMClient, RequestConfig
+   from monollm import UnifiedLLMClient, RequestConfig
 
    async def main():
        # Initialize the client
@@ -81,7 +81,7 @@ For real-time responses, use streaming:
 .. code-block:: python
 
    import asyncio
-   from unified_llm import UnifiedLLMClient, RequestConfig
+   from monollm import UnifiedLLMClient, RequestConfig
 
    async def streaming_example():
        async with UnifiedLLMClient() as client:
@@ -114,7 +114,7 @@ Qwen's QwQ model can show its reasoning process:
 .. code-block:: python
 
    import asyncio
-   from unified_llm import UnifiedLLMClient, RequestConfig
+   from monollm import UnifiedLLMClient, RequestConfig
 
    async def reasoning_example():
        async with UnifiedLLMClient() as client:
@@ -148,7 +148,7 @@ Build conversations with context:
 .. code-block:: python
 
    import asyncio
-   from unified_llm import UnifiedLLMClient, RequestConfig, Message
+   from monollm import UnifiedLLMClient, RequestConfig, Message
 
    async def conversation_example():
        async with UnifiedLLMClient() as client:
@@ -180,43 +180,43 @@ Build conversations with context:
 Command Line Interface
 ----------------------
 
-UnifiedLLM also provides a powerful CLI:
+MonoLLM also provides a powerful CLI:
 
 **List available providers:**
 
 .. code-block:: bash
 
-   unified-llm list-providers
+   monollm list-providers
 
 **List models for a specific provider:**
 
 .. code-block:: bash
 
-   unified-llm list-models --provider qwen
+   monollm list-models --provider qwen
 
 **Generate text:**
 
 .. code-block:: bash
 
-   unified-llm generate "What is artificial intelligence?" --model qwq-32b
+   monollm generate "What is artificial intelligence?" --model qwq-32b
 
 **Stream responses:**
 
 .. code-block:: bash
 
-   unified-llm generate "Tell me a joke" --model qwen-plus --stream
+   monollm generate "Tell me a joke" --model qwen-plus --stream
 
 **Use reasoning with thinking:**
 
 .. code-block:: bash
 
-   unified-llm generate "Solve: 2x + 5 = 13" --model qwq-32b --thinking
+   monollm generate "Solve: 2x + 5 = 13" --model qwq-32b --thinking
 
 **Set temperature and max tokens:**
 
 .. code-block:: bash
 
-   unified-llm generate "Write a haiku about coding" --model qwen-plus --temperature 0.9 --max-tokens 100
+   monollm generate "Write a haiku about coding" --model qwen-plus --temperature 0.9 --max-tokens 100
 
 Working with Multiple Providers
 -------------------------------
@@ -226,7 +226,7 @@ You can easily switch between providers:
 .. code-block:: python
 
    import asyncio
-   from unified_llm import UnifiedLLMClient, RequestConfig
+   from monollm import UnifiedLLMClient, RequestConfig
 
    async def multi_provider_example():
        async with UnifiedLLMClient() as client:
@@ -257,8 +257,8 @@ Always handle potential errors:
 .. code-block:: python
 
    import asyncio
-   from unified_llm import UnifiedLLMClient, RequestConfig
-   from unified_llm.core.exceptions import UnifiedLLMError, ProviderError
+   from monollm import UnifiedLLMClient, RequestConfig
+   from monollm.core.exceptions import MonoLLMError, ProviderError
 
    async def error_handling_example():
        async with UnifiedLLMClient() as client:
@@ -267,8 +267,8 @@ Always handle potential errors:
                response = await client.generate("Hello", config)
                print(response.content)
            
-           except UnifiedLLMError as e:
-               print(f"UnifiedLLM Error: {e}")
+           except MonoLLMError as e:
+               print(f"MonoLLM Error: {e}")
            except ProviderError as e:
                print(f"Provider Error: {e}")
            except Exception as e:
@@ -333,4 +333,4 @@ Common Use Cases
    config = RequestConfig(model="qwen-plus", temperature=1.0, max_tokens=2000)
    response = await client.generate("Write a science fiction short story", config)
 
-You're now ready to build amazing applications with UnifiedLLM! 🚀 
+You're now ready to build amazing applications with MonoLLM! 🚀 

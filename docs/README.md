@@ -1,22 +1,22 @@
-# UnifiedLLM Documentation
+# MonoLLM Documentation
 
-This directory contains the Sphinx documentation for UnifiedLLM.
+This directory contains the Sphinx documentation for MonoLLM.
 
 ## Building the Documentation
 
 ### Prerequisites
 
-- Python 3.13+
+- Python 3.12+
 - Sphinx and related packages
 
 ### Installation
 
 ```bash
 # Install documentation dependencies
-pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints myst-parser
+pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints myst-parser linkify-it-py mdit-py-plugins
 
 # Or if using uv
-uv pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints myst-parser
+uv pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints myst-parser linkify-it-py mdit-py-plugins
 ```
 
 ### Building
@@ -53,22 +53,22 @@ docs/
 ├── quickstart.rst       # Quick start guide
 ├── configuration.rst    # Configuration documentation
 ├── examples.rst         # Usage examples
-├── cli.rst             # CLI documentation
-├── api/                # API reference
-│   ├── client.rst      # Client API
-│   ├── models.rst      # Data models
-│   ├── providers.rst   # Provider implementations
-│   └── exceptions.rst  # Exception classes
-├── development/        # Developer documentation
-│   ├── setup.rst       # Development setup
+├── cli.rst              # CLI documentation
+├── api/                 # API reference
+│   ├── client.rst       # Client API
+│   ├── models.rst       # Data models
+│   ├── providers.rst    # Provider implementations
+│   └── exceptions.rst   # Exception classes
+├── development/         # Developer documentation
+│   ├── setup.rst        # Development setup
 │   ├── contributing.rst # Contributing guide
-│   ├── testing.rst     # Testing guide
-│   └── providers.rst   # Provider development
-├── _static/            # Static assets
-│   ├── custom.css      # Custom CSS
-│   ├── logo.png        # Logo
-│   └── favicon.ico     # Favicon
-└── _templates/         # Custom templates
+│   ├── testing.rst      # Testing guide
+│   └── providers.rst    # Provider development
+├── _static/             # Static assets
+│   ├── custom.css       # Custom CSS
+│   ├── logo.png         # Logo
+│   └── favicon.ico      # Favicon
+└── _templates/          # Custom templates
 ```
 
 ## Writing Documentation
@@ -91,7 +91,7 @@ Code blocks:
 .. code-block:: python
 
    import asyncio
-   from unified_llm import UnifiedLLMClient
+   from monollm import UnifiedLLMClient
 
 Lists:
 
@@ -102,7 +102,7 @@ Lists:
 Links:
 
 :doc:`other-page`
-:class:`~unified_llm.core.client.UnifiedLLMClient`
+:class:`~monollm.core.client.UnifiedLLMClient`
 ```
 
 ### Markdown (.md)
@@ -118,7 +118,7 @@ Some files use Markdown with MyST parser:
 
 ```python
 import asyncio
-from unified_llm import UnifiedLLMClient
+from monollm import UnifiedLLMClient
 ```
 
 - Item 1
@@ -131,7 +131,7 @@ from unified_llm import UnifiedLLMClient
 API documentation is auto-generated using Sphinx autodoc:
 
 ```rst
-.. autoclass:: unified_llm.core.client.UnifiedLLMClient
+.. autoclass:: monollm.core.client.UnifiedLLMClient
    :members:
    :undoc-members:
    :show-inheritance:
@@ -178,7 +178,7 @@ make html
 - Look for syntax errors in `.rst` files
 
 **Missing modules:**
-- Ensure UnifiedLLM is installed in development mode: `pip install -e .`
+- Ensure MonoLLM is installed in development mode: `pip install -e .`
 - Check that all imports in the source code are available
 
 **Broken links:**

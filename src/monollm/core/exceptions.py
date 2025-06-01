@@ -55,8 +55,8 @@ Author: cyborgoat
 License: MIT License
 Copyright: (c) 2025 cyborgoat
 
-For more information, visit: https://github.com/cyborgoat/unified-llm
-Documentation: https://cyborgoat.github.io/unified-llm/api/exceptions.html
+For more information, visit: https://github.com/cyborgoat/MonoLLM
+Documentation: https://cyborgoat.github.io/MonoLLM/api/exceptions.html
 """
 
 from typing import Optional, Dict, Any

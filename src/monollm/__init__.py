@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-UnifiedLLM - A unified framework for accessing multiple LLM providers.
+MonoLLM - A unified framework for accessing multiple LLM providers.
 
-UnifiedLLM is a powerful Python framework that provides a single, consistent
+MonoLLM is a powerful Python framework that provides a single, consistent
 interface for interacting with multiple Large Language Model providers. It
 abstracts away the differences between various LLM APIs, allowing developers
 to seamlessly switch between providers while maintaining the same code structure.
@@ -62,8 +62,8 @@ Quick Start:
 
 Installation:
     Install from source:
-        $ git clone https://github.com/cyborgoat/unified-llm.git
-        $ cd unified-llm
+        $ git clone https://github.com/cyborgoat/MonoLLM.git
+        $ cd MonoLLM
         $ uv sync && uv pip install -e .
 
     Or with pip:
@@ -77,9 +77,9 @@ Configuration:
 
 CLI Usage:
     The framework includes a comprehensive CLI:
-        $ unified-llm list-providers
-        $ unified-llm chat gpt-4o --stream
-        $ unified-llm generate "Explain AI" --model qwen-plus
+        $ monollm list-providers
+        $ monollm chat gpt-4o --stream
+        $ monollm generate "Explain AI" --model qwen-plus
 
 Author: cyborgoat
 License: MIT License
@@ -87,9 +87,9 @@ Copyright: (c) 2025 cyborgoat
 Version: 0.1.1
 
 For more information:
-    - GitHub: https://github.com/cyborgoat/unified-llm
-    - Documentation: https://cyborgoat.github.io/unified-llm/
-    - Issues: https://github.com/cyborgoat/unified-llm/issues
+    - GitHub: https://github.com/cyborgoat/MonoLLM
+    - Documentation: https://cyborgoat.github.io/MonoLLM/
+    - Issues: https://github.com/cyborgoat/MonoLLM/issues
 """
 
 from .core.client import UnifiedLLMClient

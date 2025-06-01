@@ -12,7 +12,7 @@ Simple Text Generation
 .. code-block:: python
 
    import asyncio
-   from unified_llm import UnifiedLLMClient, RequestConfig
+   from monollm import UnifiedLLMClient, RequestConfig
 
    async def simple_generation():
        async with UnifiedLLMClient() as client:
@@ -33,7 +33,7 @@ Streaming Response
 .. code-block:: python
 
    import asyncio
-   from unified_llm import UnifiedLLMClient, RequestConfig
+   from monollm import UnifiedLLMClient, RequestConfig
 
    async def streaming_example():
        async with UnifiedLLMClient() as client:
@@ -66,7 +66,7 @@ Reasoning with QwQ
 .. code-block:: python
 
    import asyncio
-   from unified_llm import UnifiedLLMClient, RequestConfig
+   from monollm import UnifiedLLMClient, RequestConfig
 
    async def reasoning_example():
        async with UnifiedLLMClient() as client:
@@ -100,7 +100,7 @@ Multi-turn Conversation
 .. code-block:: python
 
    import asyncio
-   from unified_llm import UnifiedLLMClient, RequestConfig, Message
+   from monollm import UnifiedLLMClient, RequestConfig, Message
 
    async def conversation_example():
        async with UnifiedLLMClient() as client:
@@ -145,7 +145,7 @@ Provider Comparison
 .. code-block:: python
 
    import asyncio
-   from unified_llm import UnifiedLLMClient, RequestConfig
+   from monollm import UnifiedLLMClient, RequestConfig
 
    async def compare_providers():
        async with UnifiedLLMClient() as client:
@@ -185,7 +185,7 @@ Content Generation
 .. code-block:: python
 
    import asyncio
-   from unified_llm import UnifiedLLMClient, RequestConfig
+   from monollm import UnifiedLLMClient, RequestConfig
 
    async def content_generation():
        async with UnifiedLLMClient() as client:
@@ -220,7 +220,7 @@ Code Generation and Review
 .. code-block:: python
 
    import asyncio
-   from unified_llm import UnifiedLLMClient, RequestConfig
+   from monollm import UnifiedLLMClient, RequestConfig
 
    async def code_assistance():
        async with UnifiedLLMClient() as client:
@@ -271,7 +271,7 @@ Data Analysis
 .. code-block:: python
 
    import asyncio
-   from unified_llm import UnifiedLLMClient, RequestConfig
+   from monollm import UnifiedLLMClient, RequestConfig
 
    async def data_analysis():
        async with UnifiedLLMClient() as client:
@@ -314,7 +314,7 @@ Creative Writing
 .. code-block:: python
 
    import asyncio
-   from unified_llm import UnifiedLLMClient, RequestConfig
+   from monollm import UnifiedLLMClient, RequestConfig
 
    async def creative_writing():
        async with UnifiedLLMClient() as client:
@@ -352,9 +352,9 @@ Robust Error Handling
 .. code-block:: python
 
    import asyncio
-   from unified_llm import UnifiedLLMClient, RequestConfig
-   from unified_llm.core.exceptions import (
-       UnifiedLLMError, 
+   from monollm import UnifiedLLMClient, RequestConfig
+   from monollm.core.exceptions import (
+       MonoLLMError, 
        ProviderError, 
        ConnectionError,
        ConfigurationError
@@ -388,8 +388,8 @@ Robust Error Handling
                print("The AI provider encountered an error.")
                return None
                
-           except UnifiedLLMError as e:
-               print(f"UnifiedLLM error: {e}")
+           except MonoLLMError as e:
+               print(f"MonoLLM error: {e}")
                return None
                
            except Exception as e:
@@ -416,8 +416,8 @@ Retry Logic
 
    import asyncio
    import time
-   from unified_llm import UnifiedLLMClient, RequestConfig
-   from unified_llm.core.exceptions import ProviderError
+   from monollm import UnifiedLLMClient, RequestConfig
+   from monollm.core.exceptions import ProviderError
 
    async def generate_with_retry(prompt: str, model: str, max_retries: int = 3):
        """Generate text with retry logic."""
@@ -465,7 +465,7 @@ Concurrent Requests
 .. code-block:: python
 
    import asyncio
-   from unified_llm import UnifiedLLMClient, RequestConfig
+   from monollm import UnifiedLLMClient, RequestConfig
 
    async def concurrent_generation():
        """Generate multiple responses concurrently."""
@@ -509,7 +509,7 @@ Batch Processing
 .. code-block:: python
 
    import asyncio
-   from unified_llm import UnifiedLLMClient, RequestConfig
+   from monollm import UnifiedLLMClient, RequestConfig
 
    async def batch_processing():
        """Process a batch of texts efficiently."""
@@ -573,7 +573,7 @@ Web Application Integration
    from fastapi import FastAPI, HTTPException
    from pydantic import BaseModel
    import asyncio
-   from unified_llm import UnifiedLLMClient, RequestConfig
+   from monollm import UnifiedLLMClient, RequestConfig
 
    app = FastAPI()
    
@@ -643,7 +643,7 @@ CLI Application
    """
    import asyncio
    import argparse
-   from unified_llm import UnifiedLLMClient, RequestConfig
+   from monollm import UnifiedLLMClient, RequestConfig
 
    async def interactive_chat():
        """Interactive chat session."""

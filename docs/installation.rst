@@ -1,14 +1,14 @@
 Installation
 ============
 
-This guide will help you install UnifiedLLM and set up your development environment.
+This guide will help you install MonoLLM and set up your development environment.
 
 Prerequisites
 -------------
 
-Before installing UnifiedLLM, ensure you have the following:
+Before installing MonoLLM, ensure you have the following:
 
-* **Python 3.13+**: UnifiedLLM requires Python 3.13 or later
+* **Python 3.12+**: MonoLLM requires Python 3.12 or later
 * **Git**: For cloning the repository
 * **uv** (recommended) or **pip**: For package management
 
@@ -59,8 +59,8 @@ Method 1: Using uv (Recommended)
 .. code-block:: bash
 
    # Clone the repository
-   git clone https://github.com/cyborgoat/unified-llm.git
-   cd unified-llm
+   git clone https://github.com/cyborgoat/MonoLLM.git
+   cd MonoLLM
 
    # Create virtual environment and install dependencies
    uv sync
@@ -74,8 +74,8 @@ Method 2: Using pip
 .. code-block:: bash
 
    # Clone the repository
-   git clone https://github.com/cyborgoat/unified-llm.git
-   cd unified-llm
+   git clone https://github.com/cyborgoat/MonoLLM.git
+   cd MonoLLM
 
    # Create virtual environment
    python -m venv venv
@@ -92,8 +92,8 @@ For contributors and developers:
 .. code-block:: bash
 
    # Clone the repository
-   git clone https://github.com/cyborgoat/unified-llm.git
-   cd unified-llm
+   git clone https://github.com/cyborgoat/MonoLLM.git
+   cd MonoLLM
 
    # Install with development dependencies
    uv sync --dev
@@ -109,18 +109,18 @@ Verify your installation by running:
 .. code-block:: bash
 
    # Check CLI is working
-   unified-llm --help
+   monollm --help
 
    # List available providers
-   unified-llm list-providers
+   monollm list-providers
 
    # Test Python import
-   python -c "from unified_llm import UnifiedLLMClient; print('Installation successful!')"
+   python -c "from monollm import UnifiedLLMClient; print('Installation successful!')"
 
 Setting Up API Keys
 -------------------
 
-UnifiedLLM requires API keys for the providers you want to use. Set them as environment variables:
+MonoLLM requires API keys for the providers you want to use. Set them as environment variables:
 
 .. code-block:: bash
 
@@ -156,15 +156,15 @@ UnifiedLLM requires API keys for the providers you want to use. Set them as envi
 Docker Installation
 -------------------
 
-You can also run UnifiedLLM using Docker:
+You can also run MonoLLM using Docker:
 
 .. code-block:: bash
 
    # Build the Docker image
-   docker build -t unified-llm .
+   docker build -t monollm .
 
    # Run with environment variables
-   docker run -e OPENAI_API_KEY=your-key unified-llm
+   docker run -e OPENAI_API_KEY=your-key monollm
 
 Troubleshooting
 ---------------
@@ -192,7 +192,7 @@ Solution: Use ``--user`` flag with pip or create a virtual environment.
 
 .. code-block:: text
 
-   ModuleNotFoundError: No module named 'unified_llm'
+   ModuleNotFoundError: No module named 'monollm'
 
 Solution: Ensure you've installed the package and activated your virtual environment.
 
@@ -202,9 +202,9 @@ Getting Help
 If you encounter issues:
 
 1. Check the `troubleshooting guide <troubleshooting.html>`_
-2. Search existing `GitHub issues <https://github.com/cyborgoat/unified-llm/issues>`_
+2. Search existing `GitHub issues <https://github.com/cyborgoat/MonoLLM/issues>`_
 3. Create a new issue with detailed error information
-4. Join our `discussions <https://github.com/cyborgoat/unified-llm/discussions>`_
+4. Join our `discussions <https://github.com/cyborgoat/MonoLLM/discussions>`_
 
 Next Steps
 ----------

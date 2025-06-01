@@ -3,19 +3,19 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-UnifiedLLM Documentation
+MonoLLM Documentation
 ========================
 
 .. image:: https://img.shields.io/badge/version-0.1.1-blue.svg
-   :target: https://github.com/cyborgoat/unified-llm
+   :target: https://github.com/cyborgoat/MonoLLM
    :alt: Version
 
-.. image:: https://img.shields.io/badge/python-3.13+-blue.svg
+.. image:: https://img.shields.io/badge/python-3.12+-blue.svg
    :target: https://python.org
    :alt: Python Version
 
 .. image:: https://img.shields.io/badge/license-MIT-green.svg
-   :target: https://github.com/cyborgoat/unified-llm/blob/main/LICENSE
+   :target: https://github.com/cyborgoat/MonoLLM/blob/main/LICENSE
    :alt: License
 
 A powerful framework that provides a unified interface for multiple LLM providers, allowing developers to seamlessly switch between different AI models while maintaining consistent API interactions.
@@ -92,8 +92,8 @@ Installation
 .. code-block:: bash
 
    # Clone the repository
-   git clone https://github.com/cyborgoat/unified-llm.git
-   cd unified-llm
+   git clone https://github.com/cyborgoat/MonoLLM.git
+   cd MonoLLM
 
    # Install with uv (recommended)
    uv sync
@@ -135,16 +135,16 @@ CLI Usage
 .. code-block:: bash
 
    # List available providers
-   unified-llm list-providers
+   monollm list-providers
 
    # List available models
-   unified-llm list-models --provider qwen
+   monollm list-models --provider qwen
 
    # Generate text
-   unified-llm generate "What is AI?" --model qwq-32b --stream
+   monollm generate "What is AI?" --model qwq-32b --stream
 
    # Use reasoning model with thinking steps
-   unified-llm generate "Solve: 2x + 5 = 13" --model qwq-32b --thinking
+   monollm generate "Solve: 2x + 5 = 13" --model qwq-32b --thinking
 
 📚 **Documentation Contents**
 -----------------------------
@@ -156,7 +156,6 @@ CLI Usage
    installation
    quickstart
    configuration
-   providers
    cli
    examples
 
@@ -165,40 +164,27 @@ CLI Usage
    :caption: API Reference
 
    api/client
-   api/models
-   api/providers
-   api/exceptions
 
 .. toctree::
    :maxdepth: 2
    :caption: Developer Guide
 
-   development/setup
-   development/contributing
-   development/testing
-   development/providers
-
 .. toctree::
    :maxdepth: 1
    :caption: Additional Resources
 
-   changelog
-   roadmap
-   faq
-   troubleshooting
-
 🔗 **Useful Links**
 -------------------
 
-* **GitHub Repository**: https://github.com/cyborgoat/unified-llm
-* **Issue Tracker**: https://github.com/cyborgoat/unified-llm/issues
-* **Discussions**: https://github.com/cyborgoat/unified-llm/discussions
+* **GitHub Repository**: https://github.com/cyborgoat/MonoLLM
+* **Issue Tracker**: https://github.com/cyborgoat/MonoLLM/issues
+* **Discussions**: https://github.com/cyborgoat/MonoLLM/discussions
 * **PyPI Package**: https://pypi.org/project/unified-llm/ *(coming soon)*
 
 📄 **License**
 --------------
 
-This project is licensed under the MIT License. See the `LICENSE <https://github.com/cyborgoat/unified-llm/blob/main/LICENSE>`_ file for details.
+This project is licensed under the MIT License. See the `LICENSE <https://github.com/cyborgoat/MonoLLM/blob/main/LICENSE>`_ file for details.
 
 Indices and tables
 ==================

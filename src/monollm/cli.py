@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-UnifiedLLM Command-Line Interface - Interactive CLI for LLM provider access.
+MonoLLM Command-Line Interface - Interactive CLI for LLM provider access.
 
-This module provides a comprehensive command-line interface for the UnifiedLLM
+This module provides a comprehensive command-line interface for the MonoLLM
 framework, enabling users to interact with multiple Large Language Model providers
 through a unified set of commands. The CLI supports both interactive chat sessions
 and single-shot text generation with extensive configuration options.
@@ -25,19 +25,19 @@ Available Commands:
 
 Example Usage:
     List all providers:
-        $ unified-llm list-providers
+        $ monollm list-providers
 
     List models for a specific provider:
-        $ unified-llm list-models --provider qwen
+        $ monollm list-models --provider qwen
 
     Start an interactive chat:
-        $ unified-llm chat qwen-plus --temperature 0.7 --stream
+        $ monollm chat qwen-plus --temperature 0.7 --stream
 
     Generate a single response:
-        $ unified-llm generate "Explain quantum computing" --model gpt-4o --thinking
+        $ monollm generate "Explain quantum computing" --model gpt-4o --thinking
 
     Use with custom configuration:
-        $ unified-llm chat claude-3-sonnet --config-dir ./my-config
+        $ monollm chat claude-3-sonnet --config-dir ./my-config
 
 Advanced Features:
     - Streaming responses with real-time output
@@ -57,8 +57,8 @@ Author: cyborgoat
 License: MIT License
 Copyright: (c) 2025 cyborgoat
 
-For more information, visit: https://github.com/cyborgoat/unified-llm
-Documentation: https://cyborgoat.github.io/unified-llm/cli.html
+For more information, visit: https://github.com/cyborgoat/MonoLLM
+Documentation: https://cyborgoat.github.io/MonoLLM/cli.html
 """
 
 import asyncio
@@ -77,7 +77,7 @@ from monollm.core.models import RequestConfig, Message
 
 # Initialize the main CLI application with help text
 app = typer.Typer(
-    help="Unified LLM Framework - Access multiple LLM providers with a single interface",
+    help="MonoLLM Framework - Access multiple LLM providers with a single interface",
     add_completion=False,
     rich_markup_mode="rich",
     context_settings={"help_option_names": ["-h", "--help"]},
@@ -113,10 +113,10 @@ def list_providers(
     
     Examples:
         List all providers:
-            $ unified-llm list-providers
+            $ monollm list-providers
             
         Use custom configuration directory:
-            $ unified-llm list-providers --config-dir ./my-config
+            $ monollm list-providers --config-dir ./my-config
     """
     try:
         client = UnifiedLLMClient(config_dir=config_dir, console=console)
@@ -180,13 +180,13 @@ def list_models(
     
     Examples:
         List all models:
-            $ unified-llm list-models
+            $ monollm list-models
             
         List models for specific provider:
-            $ unified-llm list-models --provider qwen
+            $ monollm list-models --provider qwen
             
         Use custom configuration:
-            $ unified-llm list-models --provider openai --config-dir ./my-config
+            $ monollm list-models --provider openai --config-dir ./my-config
     """
     try:
         client = UnifiedLLMClient(config_dir=config_dir, console=console)
@@ -283,16 +283,16 @@ def chat(
     
     Examples:
         Basic chat:
-            $ unified-llm chat gpt-4o
+            $ monollm chat gpt-4o
             
         Chat with streaming and custom temperature:
-            $ unified-llm chat qwen-plus --stream --temperature 0.8
+            $ monollm chat qwen-plus --stream --temperature 0.8
             
         Reasoning model with thinking steps:
-            $ unified-llm chat qwq-32b --thinking --max-tokens 2000
+            $ monollm chat qwq-32b --thinking --max-tokens 2000
             
         Specify provider explicitly:
-            $ unified-llm chat claude-3-sonnet --provider anthropic
+            $ monollm chat claude-3-sonnet --provider anthropic
     """
     async def async_chat():
         try:

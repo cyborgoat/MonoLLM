@@ -1,17 +1,17 @@
 Command Line Interface
 ======================
 
-UnifiedLLM provides a powerful command-line interface (CLI) for interacting with multiple LLM providers without writing code.
+MonoLLM provides a powerful command-line interface (CLI) for interacting with multiple LLM providers without writing code.
 
 Installation
 ------------
 
-The CLI is automatically available after installing UnifiedLLM:
+The CLI is automatically available after installing MonoLLM:
 
 .. code-block:: bash
 
    # Verify installation
-   unified-llm --help
+   monollm --help
 
 Basic Usage
 -----------
@@ -20,7 +20,7 @@ The CLI follows this general pattern:
 
 .. code-block:: bash
 
-   unified-llm <command> [arguments] [options]
+   monollm <command> [arguments] [options]
 
 Available Commands
 ------------------
@@ -32,7 +32,7 @@ List all available LLM providers:
 
 .. code-block:: bash
 
-   unified-llm list-providers
+   monollm list-providers
 
 Example output:
 
@@ -56,10 +56,10 @@ List available models:
 .. code-block:: bash
 
    # List all models
-   unified-llm list-models
+   monollm list-models
 
    # List models for specific provider
-   unified-llm list-models --provider qwen
+   monollm list-models --provider qwen
 
 Example output:
 
@@ -80,7 +80,7 @@ Generate text using a specified model:
 
 .. code-block:: bash
 
-   unified-llm generate "Your prompt here" --model MODEL_NAME [options]
+   monollm generate "Your prompt here" --model MODEL_NAME [options]
 
 **Required Arguments:**
 
@@ -104,10 +104,10 @@ Basic Text Generation
 .. code-block:: bash
 
    # Simple generation
-   unified-llm generate "What is artificial intelligence?" --model qwen-plus
+   monollm generate "What is artificial intelligence?" --model qwen-plus
 
    # With custom parameters
-   unified-llm generate "Write a creative story" --model qwen-plus --temperature 0.9 --max-tokens 500
+   monollm generate "Write a creative story" --model qwen-plus --temperature 0.9 --max-tokens 500
 
 Streaming Output
 ~~~~~~~~~~~~~~~~
@@ -115,7 +115,7 @@ Streaming Output
 .. code-block:: bash
 
    # Stream the response in real-time
-   unified-llm generate "Tell me a long story about space exploration" --model qwen-plus --stream
+   monollm generate "Tell me a long story about space exploration" --model qwen-plus --stream
 
 Reasoning Models
 ~~~~~~~~~~~~~~~~
@@ -123,10 +123,10 @@ Reasoning Models
 .. code-block:: bash
 
    # Use reasoning model with thinking steps
-   unified-llm generate "Solve: If a train travels 60 miles in 45 minutes, what is its speed in mph?" --model qwq-32b --thinking
+   monollm generate "Solve: If a train travels 60 miles in 45 minutes, what is its speed in mph?" --model qwq-32b --thinking
 
    # Complex reasoning problem
-   unified-llm generate "A farmer has 17 sheep. All but 9 die. How many are left?" --model qwq-32b --thinking
+   monollm generate "A farmer has 17 sheep. All but 9 die. How many are left?" --model qwq-32b --thinking
 
 System Messages
 ~~~~~~~~~~~~~~~
@@ -134,10 +134,10 @@ System Messages
 .. code-block:: bash
 
    # Set context with system message
-   unified-llm generate "What is 15 × 23?" --model qwen-plus --system "You are a helpful math tutor. Show your work step by step."
+   monollm generate "What is 15 × 23?" --model qwen-plus --system "You are a helpful math tutor. Show your work step by step."
 
    # Creative writing with context
-   unified-llm generate "Write a poem about coding" --model qwen-plus --system "You are a poet who loves technology"
+   monollm generate "Write a poem about coding" --model qwen-plus --system "You are a poet who loves technology"
 
 Provider-Specific Examples
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -147,37 +147,37 @@ Provider-Specific Examples
 .. code-block:: bash
 
    # Regular model
-   unified-llm generate "Explain quantum computing" --model qwen-plus
+   monollm generate "Explain quantum computing" --model qwen-plus
 
    # Reasoning model
-   unified-llm generate "Solve this logic puzzle step by step" --model qwq-32b --thinking
+   monollm generate "Solve this logic puzzle step by step" --model qwq-32b --thinking
 
 **Anthropic Claude:**
 
 .. code-block:: bash
 
    # Claude 3.5 Sonnet
-   unified-llm generate "Write a technical blog post about APIs" --model claude-3-5-sonnet-20241022
+   monollm generate "Write a technical blog post about APIs" --model claude-3-5-sonnet-20241022
 
 **OpenAI:**
 
 .. code-block:: bash
 
    # GPT-4o
-   unified-llm generate "Explain machine learning concepts" --model gpt-4o
+   monollm generate "Explain machine learning concepts" --model gpt-4o
 
    # O1 reasoning model
-   unified-llm generate "Solve this complex math problem" --model o1-preview --thinking
+   monollm generate "Solve this complex math problem" --model o1-preview --thinking
 
 **DeepSeek:**
 
 .. code-block:: bash
 
    # DeepSeek V3
-   unified-llm generate "Code review this Python function" --model deepseek-chat
+   monollm generate "Code review this Python function" --model deepseek-chat
 
    # DeepSeek R1 (reasoning)
-   unified-llm generate "Analyze this algorithm's complexity" --model deepseek-reasoner --thinking
+   monollm generate "Analyze this algorithm's complexity" --model deepseek-reasoner --thinking
 
 Advanced Usage
 --------------
@@ -190,18 +190,18 @@ Set default values using environment variables:
 .. code-block:: bash
 
    # Set default model
-   export UNIFIED_LLM_DEFAULT_MODEL=qwen-plus
+   export MONOLLM_DEFAULT_MODEL=qwen-plus
 
    # Set default temperature
-   export UNIFIED_LLM_DEFAULT_TEMPERATURE=0.7
+   export MONOLLM_DEFAULT_TEMPERATURE=0.7
 
    # Set default max tokens
-   export UNIFIED_LLM_DEFAULT_MAX_TOKENS=1000
+   export MONOLLM_DEFAULT_MAX_TOKENS=1000
 
 Configuration Files
 ~~~~~~~~~~~~~~~~~~~
 
-Create a configuration file at ``~/.unified-llm/config.json``:
+Create a configuration file at ``~/.monollm/config.json``:
 
 .. code-block:: json
 
@@ -227,7 +227,7 @@ Process multiple prompts from a file:
    # Process each prompt
    while IFS= read -r prompt; do
        echo "Prompt: $prompt"
-       unified-llm generate "$prompt" --model qwen-plus
+       monollm generate "$prompt" --model qwen-plus
        echo "---"
    done < prompts.txt
 
@@ -239,13 +239,13 @@ Control output format:
 .. code-block:: bash
 
    # JSON output
-   unified-llm generate "Hello world" --model qwen-plus --format json
+   monollm generate "Hello world" --model qwen-plus --format json
 
    # Markdown output
-   unified-llm generate "Write a README" --model qwen-plus --format markdown
+   monollm generate "Write a README" --model qwen-plus --format markdown
 
    # Plain text (default)
-   unified-llm generate "Simple response" --model qwen-plus --format text
+   monollm generate "Simple response" --model qwen-plus --format text
 
 Error Handling
 --------------
@@ -281,10 +281,10 @@ Enable verbose output for debugging:
 .. code-block:: bash
 
    # Verbose mode
-   unified-llm generate "Hello" --model qwen-plus --verbose
+   monollm generate "Hello" --model qwen-plus --verbose
 
    # Debug mode
-   unified-llm generate "Hello" --model qwen-plus --debug
+   monollm generate "Hello" --model qwen-plus --debug
 
 Performance Tips
 ----------------
@@ -304,10 +304,10 @@ Pipe Output
 .. code-block:: bash
 
    # Save to file
-   unified-llm generate "Write a Python script" --model qwq-32b > script.py
+   monollm generate "Write a Python script" --model qwq-32b > script.py
 
    # Pipe to other commands
-   unified-llm generate "List of programming languages" --model qwen-plus | grep -i python
+   monollm generate "List of programming languages" --model qwen-plus | grep -i python
 
 Shell Scripts
 ~~~~~~~~~~~~~
@@ -325,7 +325,7 @@ Shell Scripts
        exit 1
    fi
 
-   unified-llm generate "$PROMPT" --model "$MODEL" --stream
+   monollm generate "$PROMPT" --model "$MODEL" --stream
 
    # Usage: ./ai-helper.sh "Explain Docker containers"
 
@@ -337,10 +337,10 @@ Create convenient aliases:
 .. code-block:: bash
 
    # Add to ~/.bashrc or ~/.zshrc
-   alias ai='unified-llm generate'
-   alias ai-reason='unified-llm generate --model qwq-32b --thinking'
-   alias ai-stream='unified-llm generate --stream'
-   alias ai-creative='unified-llm generate --temperature 0.9'
+   alias ai='monollm generate'
+   alias ai-reason='monollm generate --model qwq-32b --thinking'
+   alias ai-stream='monollm generate --stream'
+   alias ai-creative='monollm generate --temperature 0.9'
 
    # Usage:
    # ai "What is machine learning?" --model qwen-plus
@@ -393,9 +393,9 @@ Environment Variables
    PROXY_PASSWORD          # Proxy password (optional)
 
    # CLI Defaults
-   UNIFIED_LLM_DEFAULT_MODEL       # Default model
-   UNIFIED_LLM_DEFAULT_TEMPERATURE # Default temperature
-   UNIFIED_LLM_DEFAULT_MAX_TOKENS  # Default max tokens
+   MONOLLM_DEFAULT_MODEL       # Default model
+   MONOLLM_DEFAULT_TEMPERATURE # Default temperature
+   MONOLLM_DEFAULT_MAX_TOKENS  # Default max tokens
 
 Troubleshooting
 ---------------
@@ -407,28 +407,28 @@ Common Issues
 
 .. code-block:: bash
 
-   # Ensure UnifiedLLM is installed
+   # Ensure MonoLLM is installed
    pip install -e .
 
    # Check if it's in PATH
-   which unified-llm
+   which monollm
 
 **Permission denied:**
 
 .. code-block:: bash
 
    # On Unix systems, ensure execute permissions
-   chmod +x $(which unified-llm)
+   chmod +x $(which monollm)
 
 **Slow responses:**
 
 .. code-block:: bash
 
    # Use streaming for immediate feedback
-   unified-llm generate "long prompt" --model qwen-plus --stream
+   monollm generate "long prompt" --model qwen-plus --stream
 
    # Reduce max tokens for faster responses
-   unified-llm generate "prompt" --model qwen-plus --max-tokens 100
+   monollm generate "prompt" --model qwen-plus --max-tokens 100
 
 Getting Help
 ~~~~~~~~~~~~
@@ -436,13 +436,13 @@ Getting Help
 .. code-block:: bash
 
    # General help
-   unified-llm --help
+   monollm --help
 
    # Command-specific help
-   unified-llm generate --help
-   unified-llm list-models --help
+   monollm generate --help
+   monollm list-models --help
 
    # Version information
-   unified-llm --version
+   monollm --version
 
-The CLI provides a convenient way to access UnifiedLLM's capabilities without writing code, making it perfect for quick tasks, scripting, and experimentation. 
+The CLI provides a convenient way to access MonoLLM's capabilities without writing code, making it perfect for quick tasks, scripting, and experimentation. 
