@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-UnifiedLLM Core Exceptions - Custom exception classes for error handling.
+MonoLLM Core Exceptions - Custom exception classes for error handling.
 
 This module defines a comprehensive hierarchy of custom exceptions for the
-UnifiedLLM framework. These exceptions provide detailed error information,
+MonoLLM framework. These exceptions provide detailed error information,
 structured error handling, and consistent error reporting across all
 components of the system.
 
 Exception Hierarchy:
-    UnifiedLLMError (base)
+    MonoLLMError (base)
     ├── ProviderError
     │   ├── RateLimitError
     │   ├── AuthenticationError
@@ -38,7 +38,7 @@ Example Usage:
         ...     print(f"Provider {e.provider} error: {e.message}")
         ...     if e.status_code == 429:
         ...         print("Rate limit exceeded")
-        ... except UnifiedLLMError as e:
+        ... except MonoLLMError as e:
         ...     print(f"General error: {e.message}")
 
     Specific error handling:
@@ -62,23 +62,23 @@ Documentation: https://cyborgoat.github.io/unified-llm/api/exceptions.html
 from typing import Optional, Dict, Any
 
 
-class UnifiedLLMError(Exception):
+class MonoLLMError(Exception):
     """
     Base exception for all unified LLM errors.
-    
-    This is the root exception class for all errors in the UnifiedLLM framework.
+
+    This is the root exception class for all errors in the MonoLLM framework.
     It provides a consistent interface for error handling and includes optional
     metadata for debugging and logging purposes.
-    
+
     Attributes:
         message (str): Human-readable error message
         provider (Optional[str]): Provider associated with the error
         model (Optional[str]): Model associated with the error
         error_code (Optional[str]): Structured error code for programmatic handling
         metadata (Dict[str, Any]): Additional error context and debugging information
-    
+
     Examples:
-        >>> raise UnifiedLLMError(
+        >>> raise MonoLLMError(
         ...     "Something went wrong",
         ...     provider="openai",
         ...     model="gpt-4o",
@@ -86,7 +86,7 @@ class UnifiedLLMError(Exception):
         ...     metadata={"request_id": "req_123"}
         ... )
     """
-    
+
     def __init__(
         self,
         message: str,
@@ -96,8 +96,8 @@ class UnifiedLLMError(Exception):
         metadata: Optional[Dict[str, Any]] = None,
     ):
         """
-        Initialize a UnifiedLLM error.
-        
+        Initialize a MonoLLM error.
+
         Args:
             message: Human-readable error message
             provider: Optional provider identifier
@@ -113,17 +113,17 @@ class UnifiedLLMError(Exception):
         self.metadata = metadata or {}
 
 
-class ProviderError(UnifiedLLMError):
+class ProviderError(MonoLLMError):
     """
     Error from an LLM provider.
-    
+
     This exception represents errors that originate from LLM provider APIs,
     including HTTP errors, API-specific errors, and service unavailability.
     It includes HTTP status codes for proper error classification.
-    
+
     Attributes:
         status_code (Optional[int]): HTTP status code from the provider API
-        
+
     Common Status Codes:
         - 400: Bad Request (invalid parameters)
         - 401: Unauthorized (invalid API key)
@@ -132,7 +132,7 @@ class ProviderError(UnifiedLLMError):
         - 429: Too Many Requests (rate limit exceeded)
         - 500: Internal Server Error (provider issue)
         - 503: Service Unavailable (temporary outage)
-    
+
     Examples:
         >>> raise ProviderError(
         ...     "Invalid API key",
@@ -141,7 +141,7 @@ class ProviderError(UnifiedLLMError):
         ...     error_code="invalid_api_key"
         ... )
     """
-    
+
     def __init__(
         self,
         message: str,
@@ -153,7 +153,7 @@ class ProviderError(UnifiedLLMError):
     ):
         """
         Initialize a provider error.
-        
+
         Args:
             message: Human-readable error message
             provider: Provider identifier
@@ -166,24 +166,24 @@ class ProviderError(UnifiedLLMError):
         self.status_code = status_code
 
 
-class ConfigurationError(UnifiedLLMError):
+class ConfigurationError(MonoLLMError):
     """
     Error in configuration.
-    
+
     This exception is raised when there are issues with configuration files,
     environment variables, or other configuration-related problems that
     prevent the system from operating correctly.
-    
+
     Attributes:
         config_type (Optional[str]): Type of configuration that caused the error
-    
+
     Examples:
         >>> raise ConfigurationError(
         ...     "Missing API key for OpenAI provider",
         ...     config_type="api_key"
         ... )
     """
-    
+
     def __init__(
         self,
         message: str,
@@ -192,7 +192,7 @@ class ConfigurationError(UnifiedLLMError):
     ):
         """
         Initialize a configuration error.
-        
+
         Args:
             message: Human-readable error message
             config_type: Optional type of configuration
@@ -205,13 +205,13 @@ class ConfigurationError(UnifiedLLMError):
 class RateLimitError(ProviderError):
     """
     Rate limit exceeded error.
-    
+
     This exception is raised when the provider's rate limit has been exceeded.
     It includes information about when the client can retry the request.
-    
+
     Attributes:
         retry_after (Optional[int]): Seconds to wait before retrying
-    
+
     Examples:
         >>> raise RateLimitError(
         ...     "Rate limit exceeded",
@@ -219,7 +219,7 @@ class RateLimitError(ProviderError):
         ...     retry_after=60
         ... )
     """
-    
+
     def __init__(
         self,
         message: str,
@@ -230,7 +230,7 @@ class RateLimitError(ProviderError):
     ):
         """
         Initialize a rate limit error.
-        
+
         Args:
             message: Human-readable error message
             provider: Provider identifier
@@ -245,17 +245,17 @@ class RateLimitError(ProviderError):
 class AuthenticationError(ProviderError):
     """
     Authentication error.
-    
+
     This exception is raised when authentication with a provider fails,
     typically due to invalid or missing API keys.
-    
+
     Examples:
         >>> raise AuthenticationError(
         ...     "Invalid API key",
         ...     provider="anthropic"
         ... )
     """
-    
+
     def __init__(
         self,
         message: str,
@@ -265,7 +265,7 @@ class AuthenticationError(ProviderError):
     ):
         """
         Initialize an authentication error.
-        
+
         Args:
             message: Human-readable error message
             provider: Provider identifier
@@ -278,14 +278,14 @@ class AuthenticationError(ProviderError):
 class ModelNotFoundError(ProviderError):
     """
     Model not found error.
-    
+
     This exception is raised when a requested model is not available
     from the specified provider. It includes a list of available models
     to help with error recovery.
-    
+
     Attributes:
         available_models (list): List of available model identifiers
-    
+
     Examples:
         >>> raise ModelNotFoundError(
         ...     "Model 'gpt-5' not found",
@@ -294,7 +294,7 @@ class ModelNotFoundError(ProviderError):
         ...     available_models=["gpt-4o", "gpt-4", "gpt-3.5-turbo"]
         ... )
     """
-    
+
     def __init__(
         self,
         message: str,
@@ -305,7 +305,7 @@ class ModelNotFoundError(ProviderError):
     ):
         """
         Initialize a model not found error.
-        
+
         Args:
             message: Human-readable error message
             provider: Provider identifier
@@ -320,13 +320,13 @@ class ModelNotFoundError(ProviderError):
 class QuotaExceededError(ProviderError):
     """
     Quota exceeded error.
-    
+
     This exception is raised when the provider's usage quota has been
     exceeded, typically requiring payment or plan upgrade to continue.
-    
+
     Attributes:
         quota_type (Optional[str]): Type of quota that was exceeded
-    
+
     Examples:
         >>> raise QuotaExceededError(
         ...     "Monthly token quota exceeded",
@@ -334,7 +334,7 @@ class QuotaExceededError(ProviderError):
         ...     quota_type="monthly_tokens"
         ... )
     """
-    
+
     def __init__(
         self,
         message: str,
@@ -345,7 +345,7 @@ class QuotaExceededError(ProviderError):
     ):
         """
         Initialize a quota exceeded error.
-        
+
         Args:
             message: Human-readable error message
             provider: Provider identifier
@@ -357,17 +357,17 @@ class QuotaExceededError(ProviderError):
         self.quota_type = quota_type
 
 
-class ConnectionError(UnifiedLLMError):
+class ConnectionError(MonoLLMError):
     """
     Connection error.
-    
+
     This exception is raised when there are network connectivity issues,
     timeouts, or other connection-related problems when communicating
     with provider APIs.
-    
+
     Attributes:
         timeout (Optional[float]): Timeout value that was exceeded
-    
+
     Examples:
         >>> raise ConnectionError(
         ...     "Connection timeout",
@@ -375,7 +375,7 @@ class ConnectionError(UnifiedLLMError):
         ...     timeout=30.0
         ... )
     """
-    
+
     def __init__(
         self,
         message: str,
@@ -385,7 +385,7 @@ class ConnectionError(UnifiedLLMError):
     ):
         """
         Initialize a connection error.
-        
+
         Args:
             message: Human-readable error message
             provider: Optional provider identifier
@@ -396,17 +396,17 @@ class ConnectionError(UnifiedLLMError):
         self.timeout = timeout
 
 
-class ValidationError(UnifiedLLMError):
+class ValidationError(MonoLLMError):
     """
     Validation error.
-    
+
     This exception is raised when input validation fails, such as
     invalid parameter values, malformed requests, or constraint violations.
-    
+
     Attributes:
         field (Optional[str]): Field name that failed validation
         value (Optional[Any]): Value that failed validation
-    
+
     Examples:
         >>> raise ValidationError(
         ...     "Temperature must be between 0.0 and 2.0",
@@ -414,7 +414,7 @@ class ValidationError(UnifiedLLMError):
         ...     value=3.0
         ... )
     """
-    
+
     def __init__(
         self,
         message: str,
@@ -424,7 +424,7 @@ class ValidationError(UnifiedLLMError):
     ):
         """
         Initialize a validation error.
-        
+
         Args:
             message: Human-readable error message
             field: Optional field name that failed validation
@@ -433,4 +433,4 @@ class ValidationError(UnifiedLLMError):
         """
         super().__init__(message, metadata=metadata)
         self.field = field
-        self.value = value 
+        self.value = value

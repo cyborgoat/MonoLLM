@@ -63,16 +63,17 @@ Documentation: https://cyborgoat.github.io/unified-llm/cli.html
 
 import asyncio
 from pathlib import Path
-from typing import Optional, List
+from typing import Optional
+
 import typer
 from rich.console import Console
-from rich.table import Table
-from rich.panel import Panel
 from rich.markdown import Markdown
+from rich.panel import Panel
+from rich.table import Table
 
-from unified_llm.core.client import UnifiedLLMClient
-from unified_llm.core.models import RequestConfig, Message
-from unified_llm.core.exceptions import UnifiedLLMError, ProviderError
+from monollm.core.client import UnifiedLLMClient
+from monollm.core.exceptions import MonoLLMError, ProviderError
+from monollm.core.models import RequestConfig, Message
 
 # Initialize the main CLI application with help text
 app = typer.Typer(
@@ -385,7 +386,7 @@ def chat(
                     console.print(f"\n[red]Provider Error: {e.message}[/red]")
                     if hasattr(e, 'status_code') and e.status_code:
                         console.print(f"[red]Status: {e.status_code}[/red]")
-                except UnifiedLLMError as e:
+                except MonoLLMError as e:
                     console.print(f"\n[red]Error: {e.message}[/red]")
                 except Exception as e:
                     console.print(f"\n[red]Unexpected error: {e}[/red]")
@@ -456,7 +457,7 @@ def generate(
             if hasattr(e, 'status_code') and e.status_code:
                 console.print(f"[red]Status: {e.status_code}[/red]")
             raise typer.Exit(1)
-        except UnifiedLLMError as e:
+        except MonoLLMError as e:
             console.print(f"[red]Error: {e.message}[/red]")
             raise typer.Exit(1)
         except Exception as e:

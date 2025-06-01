@@ -1,7 +1,7 @@
 """Volcengine provider implementation."""
 
-import json
 from typing import List, Dict, Any, Optional, AsyncIterator
+
 import httpx
 from openai import AsyncOpenAI
 
@@ -14,7 +14,6 @@ from ..core.models import (
     RequestConfig,
     Usage,
 )
-from ..core.exceptions import ProviderError
 
 
 class VolcengineProvider(BaseProvider):

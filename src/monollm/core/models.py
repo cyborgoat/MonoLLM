@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-UnifiedLLM Core Models - Data structures and type definitions.
+MonoLLM Core Models - Data structures and type definitions.
 
 This module defines the core data models and type definitions used throughout
-the UnifiedLLM framework. It provides Pydantic-based models for configuration,
+the MonoLLM framework. It provides Pydantic-based models for configuration,
 requests, responses, and metadata, ensuring type safety and data validation
 across the entire system.
 
@@ -54,9 +54,10 @@ For more information, visit: https://github.com/cyborgoat/unified-llm
 Documentation: https://cyborgoat.github.io/unified-llm/api/models.html
 """
 
-from typing import Any, Dict, List, Optional, Union, AsyncIterator, Literal
-from pydantic import BaseModel, Field, ConfigDict
 from datetime import datetime
+from typing import Any, Dict, List, Optional, AsyncIterator, Literal
+
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class ModelInfo(BaseModel):

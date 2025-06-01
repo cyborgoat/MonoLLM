@@ -65,7 +65,7 @@ git checkout -b fix/your-bug-fix
 pytest
 
 # Run tests with coverage
-pytest --cov=unified_llm
+pytest --cov=monollm
 
 # Run specific test file
 pytest tests/test_client.py
@@ -180,24 +180,25 @@ We use the following tools for code quality:
 ```python
 import pytest
 from unittest.mock import AsyncMock, patch
-from unified_llm import UnifiedLLMClient, RequestConfig
+from monollm import UnifiedLLMClient, RequestConfig
+
 
 class TestUnifiedLLMClient:
-    """Test cases for UnifiedLLMClient."""
-    
-    @pytest.mark.asyncio
-    async def test_generate_success(self, mock_client):
-        """Test successful text generation."""
-        # Arrange
-        config = RequestConfig(model="test-model")
-        expected_response = "Test response"
-        
-        # Act
-        response = await mock_client.generate("Test prompt", config)
-        
-        # Assert
-        assert response.content == expected_response
-        assert response.model == "test-model"
+   """Test cases for UnifiedLLMClient."""
+
+   @pytest.mark.asyncio
+   async def test_generate_success(self, mock_client):
+      """Test successful text generation."""
+      # Arrange
+      config = RequestConfig(model="test-model")
+      expected_response = "Test response"
+
+      # Act
+      response = await mock_client.generate("Test prompt", config)
+
+      # Assert
+      assert response.content == expected_response
+      assert response.model == "test-model"
 ```
 
 ### Running Tests
@@ -207,7 +208,7 @@ class TestUnifiedLLMClient:
 pytest
 
 # Run with coverage
-pytest --cov=unified_llm --cov-report=html
+pytest --cov=monollm --cov-report=html
 
 # Run specific test
 pytest tests/test_client.py::TestUnifiedLLMClient::test_generate_success
@@ -252,35 +253,36 @@ To add support for a new LLM provider:
 ### 1. Create Provider Class
 
 ```python
-# src/unified_llm/providers/new_provider.py
+# src/monollm/providers/new_provider.py
 from typing import AsyncIterator
-from unified_llm.providers.base import BaseProvider
-from unified_llm.core.models import LLMResponse, StreamingResponse, RequestConfig
+from monollm.providers.base import BaseProvider
+from monollm.core.models import LLMResponse, StreamingResponse, RequestConfig
+
 
 class NewProvider(BaseProvider):
-    """Provider for New LLM Service."""
-    
-    def __init__(self, api_key: str, base_url: str = None):
-        self.api_key = api_key
-        self.base_url = base_url or "https://api.newprovider.com/v1"
-    
-    async def generate(
-        self, 
-        messages: list, 
-        config: RequestConfig
-    ) -> LLMResponse:
-        """Generate response using New Provider API."""
-        # Implementation here
-        pass
-    
-    async def generate_stream(
-        self, 
-        messages: list, 
-        config: RequestConfig
-    ) -> AsyncIterator[StreamingResponse]:
-        """Generate streaming response."""
-        # Implementation here
-        pass
+   """Provider for New LLM Service."""
+
+   def __init__(self, api_key: str, base_url: str = None):
+      self.api_key = api_key
+      self.base_url = base_url or "https://api.newprovider.com/v1"
+
+   async def generate(
+           self,
+           messages: list,
+           config: RequestConfig
+   ) -> LLMResponse:
+      """Generate response using New Provider API."""
+      # Implementation here
+      pass
+
+   async def generate_stream(
+           self,
+           messages: list,
+           config: RequestConfig
+   ) -> AsyncIterator[StreamingResponse]:
+      """Generate streaming response."""
+      # Implementation here
+      pass
 ```
 
 ### 2. Add Provider Configuration

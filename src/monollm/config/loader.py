@@ -4,10 +4,11 @@ import json
 import os
 from pathlib import Path
 from typing import Dict, Any, Optional
+
 from dotenv import load_dotenv
 
-from unified_llm.core.exceptions import ConfigurationError
-from unified_llm.core.models import (
+from monollm.core.exceptions import ConfigurationError
+from monollm.core.models import (
     ProviderInfo,
     ModelInfo,
     ProxyConfig,

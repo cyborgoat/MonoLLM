@@ -1,27 +1,27 @@
 """Base provider interface for the unified LLM framework."""
 
 from abc import ABC, abstractmethod
-from typing import List, Dict, Any, Optional, AsyncIterator
+from typing import List, Optional
+
 import httpx
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 
-from unified_llm.core.models import (
-    Message, 
-    LLMResponse, 
-    StreamingResponse, 
-    StreamChunk,
-    RequestConfig,
-    ProviderInfo,
-    ProxyConfig,
-    TimeoutConfig,
-    RetryConfig
-)
-from unified_llm.core.exceptions import (
+from monollm.core.exceptions import (
     ProviderError,
     AuthenticationError,
     RateLimitError,
     ConnectionError,
     QuotaExceededError
+)
+from monollm.core.models import (
+    Message,
+    LLMResponse,
+    StreamingResponse,
+    RequestConfig,
+    ProviderInfo,
+    ProxyConfig,
+    TimeoutConfig,
+    RetryConfig
 )
 
 

@@ -25,7 +25,7 @@ Supported Providers:
 Example Usage:
     Basic text generation:
         >>> import asyncio
-        >>> from unified_llm import UnifiedLLMClient, RequestConfig
+        >>> from monollm import UnifiedLLMClient, RequestConfig
         >>> 
         >>> async def main():
         ...     async with UnifiedLLMClient() as client:
@@ -44,7 +44,7 @@ Example Usage:
         ...                 print(chunk.content, end="", flush=True)
 
     Multi-turn conversation:
-        >>> from unified_llm.core.models import Message
+        >>> from monollm.core.models import Message
         >>> 
         >>> async def conversation_example():
         ...     async with UnifiedLLMClient() as client:
@@ -69,23 +69,15 @@ from pathlib import Path
 from typing import Dict, List, Optional, Union
 
 from rich.console import Console
-from rich.progress import Progress, SpinnerColumn, TextColumn
 
-from unified_llm.config.loader import ConfigLoader
-from unified_llm.providers.anthropic_provider import AnthropicProvider
-from unified_llm.providers.base import BaseProvider
-from unified_llm.providers.deepseek_provider import DeepSeekProvider
-from unified_llm.providers.google_provider import GoogleProvider
-from unified_llm.providers.openai_provider import OpenAIProvider
-from unified_llm.providers.qwen_provider import QwenProvider
-from unified_llm.providers.volcengine_provider import VolcengineProvider
-from unified_llm.core.exceptions import (
+from monollm.config.loader import ConfigLoader
+from monollm.core.exceptions import (
     ConfigurationError,
     ModelNotFoundError,
-    UnifiedLLMError,
+    MonoLLMError,
     ValidationError,
 )
-from unified_llm.core.models import (
+from monollm.core.models import (
     LLMResponse,
     Message,
     ModelInfo,
@@ -93,6 +85,13 @@ from unified_llm.core.models import (
     RequestConfig,
     StreamingResponse,
 )
+from monollm.providers.anthropic_provider import AnthropicProvider
+from monollm.providers.base import BaseProvider
+from monollm.providers.deepseek_provider import DeepSeekProvider
+from monollm.providers.google_provider import GoogleProvider
+from monollm.providers.openai_provider import OpenAIProvider
+from monollm.providers.qwen_provider import QwenProvider
+from monollm.providers.volcengine_provider import VolcengineProvider
 
 
 class UnifiedLLMClient:
@@ -129,9 +128,9 @@ class UnifiedLLMClient:
     """
 
     def __init__(
-        self,
-        config_dir: Optional[Path] = None,
-        console: Optional[Console] = None,
+            self,
+            config_dir: Optional[Path] = None,
+            console: Optional[Console] = None,
     ):
         """
         Initialize the unified LLM client.
@@ -279,7 +278,7 @@ class UnifiedLLMClient:
         return self.provider_info
 
     def list_models(
-        self, provider_id: Optional[str] = None
+            self, provider_id: Optional[str] = None
     ) -> Dict[str, Dict[str, ModelInfo]]:
         """
         List all available models.
@@ -326,7 +325,7 @@ class UnifiedLLMClient:
         }
 
     def get_model_info(
-        self, model_id: str, provider_id: Optional[str] = None
+            self, model_id: str, provider_id: Optional[str] = None
     ) -> tuple[str, ModelInfo]:
         """
         Get information about a specific model.
@@ -395,7 +394,7 @@ class UnifiedLLMClient:
         )
 
     def _validate_request_config(
-        self, config: RequestConfig
+            self, config: RequestConfig
     ) -> tuple[str, str, ModelInfo]:
         """Validate request configuration and resolve provider/model.
 
@@ -438,9 +437,9 @@ class UnifiedLLMClient:
         return provider_id, config.model, model_info
 
     async def generate(
-        self,
-        messages: Union[str, List[Message]],
-        config: RequestConfig,
+            self,
+            messages: Union[str, List[Message]],
+            config: RequestConfig,
     ) -> LLMResponse:
         """Generate a response from an LLM.
 
@@ -479,19 +478,19 @@ class UnifiedLLMClient:
                 return await provider.generate(messages, config_with_id)
 
         except Exception as e:
-            if isinstance(e, UnifiedLLMError):
+            if isinstance(e, MonoLLMError):
                 raise
             else:
-                raise UnifiedLLMError(
+                raise MonoLLMError(
                     f"Unexpected error during generation: {e}",
                     provider=provider_id,
                     model=model_id,
                 )
 
     async def generate_stream(
-        self,
-        messages: Union[str, List[Message]],
-        config: RequestConfig,
+            self,
+            messages: Union[str, List[Message]],
+            config: RequestConfig,
     ) -> StreamingResponse:
         """Generate a streaming response from an LLM.
 
@@ -525,10 +524,10 @@ class UnifiedLLMClient:
         try:
             return await provider.generate_stream(messages, config_with_id)
         except Exception as e:
-            if isinstance(e, UnifiedLLMError):
+            if isinstance(e, MonoLLMError):
                 raise
             else:
-                raise UnifiedLLMError(  # noqa: B904
+                raise MonoLLMError(  # noqa: B904
                     f"Unexpected error during streaming generation: {e}",
                     provider=provider_id,
                     model=model_id,

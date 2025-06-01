@@ -2,6 +2,7 @@
 
 import json
 from typing import List, Dict, Any, Optional, AsyncIterator
+
 import httpx
 
 from .base import BaseProvider
@@ -13,7 +14,6 @@ from ..core.models import (
     RequestConfig,
     Usage,
 )
-from ..core.exceptions import ProviderError
 
 
 class GoogleProvider(BaseProvider):

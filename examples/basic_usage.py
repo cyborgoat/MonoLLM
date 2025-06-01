@@ -1,7 +1,8 @@
 """Basic usage example for UnifiedLLM with Qwen models."""
 
 import asyncio
-from unified_llm import UnifiedLLMClient, RequestConfig, Message
+
+from monollm import UnifiedLLMClient, RequestConfig, Message
 
 
 async def basic_generation():

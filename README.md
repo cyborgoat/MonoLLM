@@ -1,4 +1,4 @@
-# UnifiedLLM
+# MonoLLM
 
 [![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://python.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
@@ -77,7 +77,8 @@ export OPENAI_API_KEY="your-openai-api-key"        # For GPT models
 
 ```python
 import asyncio
-from unified_llm import UnifiedLLMClient, RequestConfig
+from monollm import UnifiedLLMClient, RequestConfig
+
 
 async def main():
     async with UnifiedLLMClient() as client:
@@ -86,15 +87,16 @@ async def main():
             temperature=0.7,
             max_tokens=1000,
         )
-        
+
         response = await client.generate(
             "Explain quantum computing in simple terms.",
             config
         )
-        
+
         print(response.content)
         if response.usage:
             print(f"Tokens used: {response.usage.total_tokens}")
+
 
 asyncio.run(main())
 ```
@@ -165,8 +167,9 @@ response = await client.generate(messages, config)
 ```
 
 ### Error Handling
+
 ```python
-from unified_llm.core.exceptions import UnifiedLLMError, ProviderError
+from monollm.core.exceptions import UnifiedLLMError, ProviderError
 
 try:
     response = await client.generate(prompt, config)

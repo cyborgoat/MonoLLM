@@ -1,30 +1,29 @@
-"""DeepSeek provider implementation."""
+"""OpenAI provider implementation."""
 
-import json
-from typing import List, Dict, Any, Optional, AsyncIterator
+from typing import AsyncIterator, List, Dict, Any, Optional
+
 import httpx
 from openai import AsyncOpenAI
 
-from .base import BaseProvider
-from ..core.models import (
-    Message,
+from monollm.core.models import (
     LLMResponse,
     StreamingResponse,
-    StreamChunk,
     RequestConfig,
+    Message,
     Usage,
+    StreamChunk,
 )
-from ..core.exceptions import ProviderError
+from .base import BaseProvider
 
 
-class DeepSeekProvider(BaseProvider):
-    """DeepSeek provider implementation using OpenAI-compatible API."""
+class OpenAIProvider(BaseProvider):
+    """OpenAI provider implementation."""
     
     def __init__(self, *args, **kwargs):
-        """Initialize the DeepSeek provider."""
+        """Initialize the OpenAI provider."""
         super().__init__(*args, **kwargs)
         
-        # Create OpenAI-compatible client for DeepSeek
+        # Create OpenAI client
         self.openai_client = AsyncOpenAI(
             api_key=self.api_key,
             base_url=self.base_url,
@@ -33,7 +32,7 @@ class DeepSeekProvider(BaseProvider):
     
     def get_provider_name(self) -> str:
         """Get the provider name."""
-        return "deepseek"
+        return "openai"
     
     def _convert_messages(self, messages: List[Message]) -> List[Dict[str, str]]:
         """Convert internal messages to OpenAI format."""
@@ -43,7 +42,7 @@ class DeepSeekProvider(BaseProvider):
         ]
     
     def _build_request_params(self, messages: List[Message], config: RequestConfig) -> Dict[str, Any]:
-        """Build request parameters for DeepSeek API."""
+        """Build request parameters for OpenAI API."""
         params = {
             "model": config.model,
             "messages": self._convert_messages(messages),
@@ -57,16 +56,21 @@ class DeepSeekProvider(BaseProvider):
         if config.max_tokens is not None:
             params["max_tokens"] = config.max_tokens
         
-        # For reasoning models like deepseek-r1, handle special features
+        # For reasoning models, add specific parameters
         model_info = self.provider_info.models.get(config.model)
         if model_info and model_info.is_reasoning_model:
-            # DeepSeek R1 might have special handling for thinking
-            pass
+            # Reasoning models don't support temperature and have different streaming behavior
+            if "temperature" in params:
+                del params["temperature"]
+            
+            # o1 models don't support streaming yet
+            if config.model.startswith("o1"):
+                params["stream"] = False
         
         return params
     
     def _parse_usage(self, usage_data: Any) -> Optional[Usage]:
-        """Parse usage information from DeepSeek response."""
+        """Parse usage information from OpenAI response."""
         if not usage_data:
             return None
         
@@ -82,7 +86,7 @@ class DeepSeekProvider(BaseProvider):
         messages: List[Message],
         config: RequestConfig,
     ) -> LLMResponse:
-        """Generate a response from DeepSeek."""
+        """Generate a response from OpenAI."""
         try:
             params = self._build_request_params(messages, config)
             
@@ -117,7 +121,7 @@ class DeepSeekProvider(BaseProvider):
         messages: List[Message],
         config: RequestConfig,
     ) -> AsyncIterator[StreamChunk]:
-        """Generate streaming chunks from DeepSeek."""
+        """Generate streaming chunks from OpenAI."""
         try:
             params = self._build_request_params(messages, config)
             
@@ -142,7 +146,7 @@ class DeepSeekProvider(BaseProvider):
                         is_complete=False,
                     )
                 
-                # Handle reasoning delta (for reasoning models like deepseek-r1)
+                # Handle reasoning delta (for reasoning models)
                 if hasattr(choice.delta, 'reasoning') and choice.delta.reasoning:
                     thinking_delta = choice.delta.reasoning
                     thinking_buffer += thinking_delta
@@ -178,7 +182,7 @@ class DeepSeekProvider(BaseProvider):
         messages: List[Message],
         config: RequestConfig,
     ) -> StreamingResponse:
-        """Generate a streaming response from DeepSeek."""
+        """Generate a streaming response from OpenAI."""
         chunks = self._stream_chunks(messages, config)
         
         return StreamingResponse(

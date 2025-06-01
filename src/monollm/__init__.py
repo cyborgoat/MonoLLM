@@ -29,7 +29,7 @@ Supported Providers:
 Quick Start:
     Basic usage example:
         >>> import asyncio
-        >>> from unified_llm import UnifiedLLMClient, RequestConfig
+        >>> from monollm import UnifiedLLMClient, RequestConfig
         >>> 
         >>> async def main():
         ...     async with UnifiedLLMClient() as client:
@@ -48,7 +48,7 @@ Quick Start:
         ...                 print(chunk.content, end="", flush=True)
 
     Multi-turn conversation:
-        >>> from unified_llm import Message
+        >>> from monollm import Message
         >>> 
         >>> async def chat_example():
         ...     async with UnifiedLLMClient() as client:
@@ -93,6 +93,17 @@ For more information:
 """
 
 from .core.client import UnifiedLLMClient
+from .core.exceptions import (
+    MonoLLMError,
+    ProviderError,
+    ConfigurationError,
+    RateLimitError,
+    AuthenticationError,
+    ModelNotFoundError,
+    QuotaExceededError,
+    ConnectionError,
+    ValidationError,
+)
 from .core.models import (
     LLMResponse,
     StreamingResponse,
@@ -102,17 +113,6 @@ from .core.models import (
     Message,
     Usage,
     StreamChunk,
-)
-from .core.exceptions import (
-    UnifiedLLMError,
-    ProviderError,
-    ConfigurationError,
-    RateLimitError,
-    AuthenticationError,
-    ModelNotFoundError,
-    QuotaExceededError,
-    ConnectionError,
-    ValidationError,
 )
 
 # Version information
@@ -125,7 +125,7 @@ __copyright__ = "Copyright (c) 2025 cyborgoat"
 __all__ = [
     # Core client
     "UnifiedLLMClient",
-    
+
     # Data models
     "LLMResponse",
     "StreamingResponse",
@@ -135,9 +135,9 @@ __all__ = [
     "Message",
     "Usage",
     "StreamChunk",
-    
+
     # Exceptions
-    "UnifiedLLMError",
+    "MonoLLMError",
     "ProviderError",
     "ConfigurationError",
     "RateLimitError",
@@ -146,10 +146,10 @@ __all__ = [
     "QuotaExceededError",
     "ConnectionError",
     "ValidationError",
-    
+
     # Metadata
     "__version__",
     "__author__",
     "__license__",
     "__copyright__",
-] 
+]
