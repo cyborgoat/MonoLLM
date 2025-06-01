@@ -44,26 +44,26 @@
       "supports_streaming": true,
       "supports_mcp": true,
       "models": {
-        "claude-opus-4": {
-          "name": "claude-opus-4-20250514",
-          "max_tokens": 320000,
+        "claude-opus-4-20250514": {
+          "name": "Claude Opus 4",
+          "max_tokens": 32000,
           "supports_temperature": true,
           "supports_streaming": true,
           "supports_thinking": false
         },
-        "claude-sonnet-4": {
-          "name": "claude-sonnet-4-20250514",
-          "max_tokens": 320000,
+        "claude-sonnet-4-20250514": {
+          "name": "Claude Sonnet 4",
+          "max_tokens": 64000,
           "supports_temperature": true,
           "supports_streaming": true,
           "supports_thinking": false
         },
-        "claude-3-7-sonnet": {
-          "name": "claude-3-7-sonnet-20250219",
-          "max_tokens": 320000,
+        "claude-3-7-sonnet-20250219": {
+          "name": "Claude 3.7 Sonnet",
+          "max_tokens": 64000,
           "supports_temperature": true,
           "supports_streaming": true,
-          "supports_thinking": false
+          "supports_thinking": true
         },
         "claude-3-5-sonnet-20241022": {
           "name": "Claude 3.5 Sonnet",
@@ -89,21 +89,21 @@
       "supports_mcp": false,
       "models": {
         "gemini-2.5-flash-preview-05-20": {
-          "name": "gemini-2.5-flash-preview-05-20",
+          "name": "Gemini 2.5 Flash Preview",
           "max_tokens": 8192,
           "supports_temperature": true,
           "supports_streaming": true,
           "supports_thinking": false
         },
         "gemini-2.5-pro-preview-05-06": {
-          "name": "gemini-2.5-pro-preview",
+          "name": "Gemini 2.5 Pro Preview",
           "max_tokens": 8192,
           "supports_temperature": true,
           "supports_streaming": true,
           "supports_thinking": false
         },
         "gemini-2.0-flash": {
-          "name": "gemini-2.0-flash",
+          "name": "Gemini 2.0 Flash",
           "max_tokens": 8192,
           "supports_temperature": true,
           "supports_streaming": true,
@@ -118,21 +118,34 @@
       "supports_streaming": true,
       "supports_mcp": false,
       "models": {
-        "qwq-plus": {
-          "name": "QwQ Plus",
-          "max_tokens": 8192,
+        "qwq-32b": {
+          "name": "QwQ 32B",
+          "max_tokens": 32768,
           "supports_temperature": true,
           "supports_streaming": true,
           "supports_thinking": true,
           "stream_only": true
         },
-        "qwq-32b": {
-          "name": "QwQ 32B",
-          "max_tokens": 8192,
+        "qwen-plus": {
+          "name": "Qwen Plus",
+          "max_tokens": 32768,
           "supports_temperature": true,
           "supports_streaming": true,
-          "supports_thinking": true,
-          "stream_only": true
+          "supports_thinking": false
+        },
+        "qwen-max": {
+          "name": "Qwen Max",
+          "max_tokens": 32768,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "supports_thinking": false
+        },
+        "qwen-turbo": {
+          "name": "Qwen Turbo",
+          "max_tokens": 32768,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "supports_thinking": false
         },
         "qwen3-32b": {
           "name": "Qwen3 32B",
@@ -142,9 +155,9 @@
           "supports_thinking": true,
           "stream_only": true
         },
-        "qwen3-30b-a3b": {
-          "name": "qwen3-30b-a3b",
-          "max_tokens": 98304,
+        "qwen3-14b": {
+          "name": "Qwen3 14B",
+          "max_tokens": 32768,
           "supports_temperature": true,
           "supports_streaming": true,
           "supports_thinking": true,
@@ -152,6 +165,14 @@
         },
         "qwen3-8b": {
           "name": "Qwen3 8B",
+          "max_tokens": 28672,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "supports_thinking": true,
+          "stream_only": true
+        },
+        "qwen3-1.7b": {
+          "name": "Qwen3 1.7B",
           "max_tokens": 28672,
           "supports_temperature": true,
           "supports_streaming": true,
