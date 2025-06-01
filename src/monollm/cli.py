@@ -201,8 +201,8 @@ def list_models(
             table.add_column("Max Tokens", style="blue")
             table.add_column("Temperature", style="yellow")
             table.add_column("Streaming", style="magenta")
-            table.add_column("Reasoning", style="red")
             table.add_column("Thinking", style="bright_red")
+            table.add_column("Stream Only", style="orange1")
             
             for model_id, model_info in provider_models.items():
                 table.add_row(
@@ -211,8 +211,8 @@ def list_models(
                     str(model_info.max_tokens),
                     "✓" if model_info.supports_temperature else "✗",
                     "✓" if model_info.supports_streaming else "✗",
-                    "✓" if model_info.is_reasoning_model else "✗",
                     "✓" if model_info.supports_thinking else "✗",
+                    "✓" if getattr(model_info, 'stream_only', False) else "✗",
                 )
             
             console.print(table)
@@ -305,7 +305,6 @@ def chat(
                 f"[green]Connected to {model_info.name}[/green]\n"
                 f"Provider: {client.list_providers()[provider_id].name}\n"
                 f"Max tokens: {model_info.max_tokens:,}\n"
-                f"Reasoning model: {'Yes' if model_info.is_reasoning_model else 'No'}\n"
                 f"Supports thinking: {'Yes' if model_info.supports_thinking else 'No'}",
                 title="Model Info"
             ))

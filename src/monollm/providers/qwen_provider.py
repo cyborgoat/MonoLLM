@@ -56,10 +56,11 @@ class QwenProvider(BaseProvider):
         if config.max_tokens is not None:
             params["max_tokens"] = config.max_tokens
 
-        # For reasoning models like QwQ, handle special features
+        # For reasoning models like QwQ and Qwen3, handle thinking mode
         model_info = self.provider_info.models.get(config.model)
-        if model_info and model_info.is_reasoning_model:
-            # QwQ might have special handling for thinking
+        if model_info and model_info.supports_thinking:
+            # QwQ models naturally output thinking steps in streaming mode
+            # Thinking steps are handled in response parsing
             pass
 
         return params
@@ -92,7 +93,9 @@ class QwenProvider(BaseProvider):
 
             # Check for thinking steps in reasoning models
             thinking = None
-            if hasattr(response.choices[0].message, "reasoning"):
+            if hasattr(response.choices[0].message, "reasoning_content"):
+                thinking = response.choices[0].message.reasoning_content
+            elif hasattr(response.choices[0].message, "reasoning"):
                 thinking = response.choices[0].message.reasoning
 
             return LLMResponse(
@@ -143,7 +146,17 @@ class QwenProvider(BaseProvider):
                     )
 
                 # Handle reasoning delta (for reasoning models like QwQ)
-                if hasattr(choice.delta, "reasoning") and choice.delta.reasoning:
+                if hasattr(choice.delta, "reasoning_content") and choice.delta.reasoning_content:
+                    thinking_delta = choice.delta.reasoning_content
+                    thinking_buffer += thinking_delta
+
+                    if config.show_thinking:
+                        yield StreamChunk(
+                            content="",
+                            thinking=thinking_delta,
+                            is_complete=False,
+                        )
+                elif hasattr(choice.delta, "reasoning") and choice.delta.reasoning:
                     thinking_delta = choice.delta.reasoning
                     thinking_buffer += thinking_delta
 

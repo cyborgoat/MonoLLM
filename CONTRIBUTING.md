@@ -304,7 +304,7 @@ Update `config/models.json`:
           "max_tokens": 4096,
           "supports_temperature": true,
           "supports_streaming": true,
-          "is_reasoning_model": false
+          "supports_thinking": false
         }
       }
     }

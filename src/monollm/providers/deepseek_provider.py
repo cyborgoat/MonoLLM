@@ -56,11 +56,11 @@ class DeepSeekProvider(BaseProvider):
         if config.max_tokens is not None:
             params["max_tokens"] = config.max_tokens
         
-        # For reasoning models like deepseek-r1, handle special features
+        # For reasoning models like deepseek-reasoner, handle thinking mode
         model_info = self.provider_info.models.get(config.model)
-        if model_info and model_info.is_reasoning_model:
-            # DeepSeek R1 might have special handling for thinking
-            pass
+        if model_info and model_info.supports_thinking:
+            # DeepSeek reasoning models support thinking steps
+            pass  # No special parameters needed for DeepSeek reasoning models
         
         return params
     

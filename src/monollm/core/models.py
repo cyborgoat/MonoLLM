@@ -71,8 +71,8 @@ class ModelInfo(BaseModel):
         max_tokens (int): Maximum number of output tokens the model can generate
         supports_temperature (bool): Whether the model supports temperature control
         supports_streaming (bool): Whether the model can stream responses
-        is_reasoning_model (bool): Whether this is a reasoning/thinking model
-        supports_thinking (bool): Whether thinking steps are available for display
+        supports_thinking (bool): Whether this model supports reasoning with thinking steps
+        stream_only (bool): Whether this model only supports streaming mode
     
     Examples:
         >>> model = ModelInfo(
@@ -80,8 +80,8 @@ class ModelInfo(BaseModel):
         ...     max_tokens=4096,
         ...     supports_temperature=True,
         ...     supports_streaming=True,
-        ...     is_reasoning_model=False,
-        ...     supports_thinking=False
+        ...     supports_thinking=False,
+        ...     stream_only=False
         ... )
     """
 
@@ -95,11 +95,11 @@ class ModelInfo(BaseModel):
     supports_streaming: bool = Field(
         default=True, description="Whether streaming is supported"
     )
-    is_reasoning_model: bool = Field(
-        default=False, description="Whether this is a reasoning model"
-    )
     supports_thinking: bool = Field(
-        default=False, description="Whether thinking steps are available"
+        default=False, description="Whether this model supports reasoning with thinking steps"
+    )
+    stream_only: bool = Field(
+        default=False, description="Whether this model only supports streaming mode"
     )
 
 

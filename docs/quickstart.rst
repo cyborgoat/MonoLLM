@@ -1,289 +1,311 @@
 Quick Start Guide
 =================
 
-This guide will get you up and running with MonoLLM in just a few minutes.
+This guide will help you get started with MonoLLM quickly and efficiently.
+
+Installation
+------------
 
 Prerequisites
+~~~~~~~~~~~~~
+
+- Python 3.12 or higher
+- API keys for the providers you want to use
+
+Install MonoLLM
+~~~~~~~~~~~~~~~
+
+Using pip:
+
+.. code-block:: bash
+
+   pip install monollm
+
+From source:
+
+.. code-block:: bash
+
+   git clone https://github.com/cyborgoat/MonoLLM.git
+   cd MonoLLM
+   pip install -e .
+
+Configuration
 -------------
 
-Before you begin, make sure you have:
+Environment Variables
+~~~~~~~~~~~~~~~~~~~~~
 
-1. **Python 3.13+** installed
-2. **MonoLLM** installed (see :doc:`installation`)
-3. **API keys** for at least one provider
+Set up your API keys as environment variables:
 
-Setting Up Your First Provider
--------------------------------
+.. code-block:: bash
 
-Let's start with Qwen, which offers excellent reasoning capabilities:
+   # OpenAI
+   export OPENAI_API_KEY="your-openai-api-key"
+   
+   # Anthropic
+   export ANTHROPIC_API_KEY="your-anthropic-api-key"
+   
+   # Qwen/DashScope
+   export DASHSCOPE_API_KEY="your-dashscope-api-key"
+   
+   # DeepSeek
+   export DEEPSEEK_API_KEY="your-deepseek-api-key"
+   
+   # Google (optional)
+   export GOOGLE_API_KEY="your-google-api-key"
 
-1. **Get your API key** from `DashScope <https://dashscope.aliyun.com/>`_
-2. **Set the environment variable**:
+Using .env File
+~~~~~~~~~~~~~~~
 
-   .. code-block:: bash
+Create a ``.env`` file in your project root:
 
-      export DASHSCOPE_API_KEY="your-dashscope-api-key"
+.. code-block:: bash
 
-3. **Verify the setup**:
+   OPENAI_API_KEY=your-openai-api-key
+   ANTHROPIC_API_KEY=your-anthropic-api-key
+   DASHSCOPE_API_KEY=your-dashscope-api-key
+   DEEPSEEK_API_KEY=your-deepseek-api-key
 
-   .. code-block:: bash
+Basic Usage
+-----------
 
-      monollm list-providers
-
-Your First Generation
----------------------
-
-Let's create your first text generation:
+Simple Text Generation
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
    import asyncio
    from monollm import UnifiedLLMClient, RequestConfig
 
-   async def main():
+   async def basic_example():
        async with UnifiedLLMClient() as client:
            config = RequestConfig(
-               model="gpt-4o",
+               model="gpt-4o-mini",
                temperature=0.7,
-               max_tokens=100,
+               max_tokens=100
            )
            
            response = await client.generate(
-               "Explain quantum computing briefly.",
+               "Explain machine learning in one paragraph",
                config
            )
            
-           print(f"Content: {response.content}")
-           if response.usage:
-               print(f"Tokens used: {response.usage.total_tokens}")
-               print(f"Cost estimate: ${response.usage.total_tokens * 0.00001:.5f}")
+           print(response.content)
+           print(f"Tokens used: {response.usage.total_tokens}")
 
-   asyncio.run(main())
+   asyncio.run(basic_example())
 
 Streaming Responses
--------------------
+~~~~~~~~~~~~~~~~~~~
 
-For real-time responses, use streaming:
+For real-time response streaming:
 
 .. code-block:: python
 
    import asyncio
    from monollm import UnifiedLLMClient, RequestConfig
 
-   async def main():
+   async def streaming_example():
        async with UnifiedLLMClient() as client:
            config = RequestConfig(
-               model="gpt-4o",
-               stream=True,
+               model="claude-3-5-sonnet-20241022",
                temperature=0.7,
+               stream=True
            )
            
+           print("Streaming response:")
            async for chunk in await client.generate_stream(
-               "Tell me a short story about a robot.",
+               "Write a short story about a robot",
                config
            ):
                if chunk.content:
                    print(chunk.content, end="", flush=True)
-           
-           print()  # New line after streaming
+               
+               if chunk.is_complete:
+                   print("\n\nStreaming complete!")
+                   break
 
-   asyncio.run(main())
-
-Using Reasoning Models
-----------------------
-
-Qwen's QwQ model can show its reasoning process:
-
-.. code-block:: python
-
-   import asyncio
-   from monollm import UnifiedLLMClient, RequestConfig
-
-   async def main():
-       async with UnifiedLLMClient() as client:
-           config = RequestConfig(
-               model="qwq-32b",  # Qwen's reasoning model
-               temperature=0.1,
-               max_tokens=2000,
-           )
-           
-           response = await client.generate(
-               "Solve this step by step: If a train travels 120 km in 2 hours, what is its average speed?",
-               config
-           )
-           
-           print("Response:", response.content)
-           if response.thinking:
-               print("\nThinking process:")
-               print(response.thinking)
-
-   asyncio.run(main())
+   asyncio.run(streaming_example())
 
 Multi-turn Conversations
-------------------------
-
-Build conversations with context:
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
    import asyncio
    from monollm import UnifiedLLMClient, RequestConfig, Message
 
-   async def main():
+   async def conversation_example():
        async with UnifiedLLMClient() as client:
            messages = [
-               Message(role="system", content="You are a helpful assistant."),
-               Message(role="user", content="What is Python?"),
-               Message(role="assistant", content="Python is a high-level programming language..."),
-               Message(role="user", content="Can you give me a simple example?"),
+               Message(role="system", content="You are a helpful programming assistant."),
+               Message(role="user", content="How do I create a list in Python?"),
+               Message(role="assistant", content="You can create a list using square brackets: my_list = [1, 2, 3]"),
+               Message(role="user", content="How do I add items to it?")
            ]
            
+           config = RequestConfig(model="gpt-4o")
+           response = await client.generate(messages, config)
+           
+           print("Assistant:", response.content)
+
+   asyncio.run(conversation_example())
+
+Reasoning Models
+~~~~~~~~~~~~~~~~
+
+Use models with thinking capabilities:
+
+.. code-block:: python
+
+   import asyncio
+   from monollm import UnifiedLLMClient, RequestConfig
+
+   async def reasoning_example():
+       async with UnifiedLLMClient() as client:
            config = RequestConfig(
-               model="claude-3-sonnet",
+               model="qwq-32b",  # Qwen's reasoning model
                temperature=0.7,
+               show_thinking=True,
+               stream=True  # Required for QwQ models
            )
            
-           response = await client.generate(messages, config)
-           print(response.content)
+           prompt = "Solve this step by step: If a train travels 60 miles in 45 minutes, what is its speed in mph?"
+           
+           thinking_content = ""
+           final_answer = ""
+           
+           async for chunk in await client.generate_stream(prompt, config):
+               if chunk.thinking:
+                   thinking_content += chunk.thinking
+               if chunk.content:
+                   final_answer += chunk.content
+               if chunk.is_complete:
+                   break
+           
+           print("Thinking process:")
+           print(thinking_content[:200] + "..." if len(thinking_content) > 200 else thinking_content)
+           print("\nFinal answer:")
+           print(final_answer)
 
-   asyncio.run(main())
+   asyncio.run(reasoning_example())
 
 Command Line Interface
 ----------------------
 
-MonoLLM also provides a powerful CLI:
+MonoLLM includes a powerful CLI for quick interactions:
 
-**List available providers:**
+List Available Providers
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: bash
 
    monollm list-providers
 
-**List models for a specific provider:**
+List Available Models
+~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: bash
 
+   monollm list-models
    monollm list-models --provider qwen
 
-**Generate text:**
+Generate Text
+~~~~~~~~~~~~~
 
 .. code-block:: bash
 
-   monollm generate "What is artificial intelligence?" --model qwq-32b
-
-**Stream responses:**
-
-.. code-block:: bash
-
-   monollm generate "Tell me a joke" --model qwen-plus --stream
-
-**Use reasoning with thinking:**
-
-.. code-block:: bash
-
+   # Basic generation
+   monollm generate "What is artificial intelligence?" --model gpt-4o-mini
+   
+   # With streaming
+   monollm generate "Write a poem about coding" --model claude-3-5-sonnet-20241022 --stream
+   
+   # Reasoning model with thinking
    monollm generate "Solve: 2x + 5 = 13" --model qwq-32b --thinking
 
-**Set temperature and max tokens:**
+Interactive Chat
+~~~~~~~~~~~~~~~~
 
 .. code-block:: bash
 
-   monollm generate "Write a haiku about coding" --model qwen-plus --temperature 0.9 --max-tokens 100
-
-Working with Multiple Providers
--------------------------------
-
-You can easily switch between providers:
-
-.. code-block:: python
-
-   import asyncio
-   from monollm import UnifiedLLMClient, RequestConfig
-
-   async def main():
-       async with UnifiedLLMClient() as client:
-           # List all available providers
-           providers = await client.list_providers()
-           for provider in providers:
-               print(f"Provider: {provider.name}")
-               print(f"  Status: {provider.status}")
-               print(f"  Models: {len(provider.models)}")
-               print()
-
-   asyncio.run(main())
+   # Start interactive chat
+   monollm chat gpt-4o --stream
+   
+   # Chat with reasoning model
+   monollm chat qwq-32b --thinking
 
 Error Handling
 --------------
 
-Always handle potential errors:
+Always handle potential errors in production code:
 
 .. code-block:: python
 
    import asyncio
    from monollm import UnifiedLLMClient, RequestConfig
-   from monollm.core.exceptions import MonoLLMError, ProviderError
+   from monollm.core.exceptions import (
+       ProviderError, 
+       RateLimitError, 
+       QuotaExceededError,
+       ModelNotFoundError
+   )
 
-   async def error_handling_example():
+   async def robust_example():
        async with UnifiedLLMClient() as client:
            try:
-               config = RequestConfig(model="non-existent-model")
-               response = await client.generate("Hello", config)
+               config = RequestConfig(model="gpt-4o")
+               response = await client.generate("Hello, world!", config)
                print(response.content)
-           
-           except MonoLLMError as e:
-               print(f"MonoLLM Error: {e}")
+               
+           except ModelNotFoundError as e:
+               print(f"Model not found: {e.message}")
+           except RateLimitError as e:
+               print(f"Rate limit exceeded: {e.message}")
+           except QuotaExceededError as e:
+               print(f"Quota exceeded: {e.message}")
            except ProviderError as e:
-               print(f"Provider Error: {e}")
+               print(f"Provider error: {e.message}")
            except Exception as e:
-               print(f"Unexpected Error: {e}")
+               print(f"Unexpected error: {e}")
 
-   asyncio.run(error_handling_example())
+   asyncio.run(robust_example())
 
-Best Practices
---------------
+Testing Your Setup
+------------------
 
-1. **Use async context managers**: Always use ``async with UnifiedLLMClient()`` for proper resource management.
-2. **Handle exceptions**: Wrap calls in try-catch blocks for production use.
-3. **Monitor usage**: Track token usage and costs.
-4. **Configure timeouts**: Set appropriate timeouts for your use case.
-5. **Use streaming**: For long responses, use streaming to improve user experience.
+Use the built-in test utilities to verify your configuration:
+
+.. code-block:: bash
+
+   # Quick test with a working model
+   python test/run_tests.py --quick
+   
+   # Test specific provider
+   python test/run_tests.py --provider qwen
+   
+   # Test reasoning capabilities
+   python test/run_tests.py --thinking
 
 Next Steps
 ----------
 
-- Read the :doc:`configuration` guide to set up providers
-- Explore :doc:`examples` for more advanced usage patterns
-- Check out the :doc:`cli` for command-line usage
-- Review the API reference for detailed documentation
+- Read the :doc:`configuration` guide for advanced setup options
+- Explore :doc:`examples` for more complex use cases
+- Check the :doc:`api/client` reference for detailed API documentation
+- Visit the :doc:`testing` guide to validate your setup
 
-Common Use Cases
-----------------
+Common Issues
+-------------
 
-**Content Generation:**
+**API Key Not Found**
+   Make sure your environment variables are set correctly or your ``.env`` file is in the right location.
 
-.. code-block:: python
+**Model Not Available**
+   Check if the model is configured in ``config/models.json`` and your API key has access to it.
 
-   config = RequestConfig(model="qwen-plus", temperature=0.8, max_tokens=1000)
-   response = await client.generate("Write a blog post about renewable energy", config)
+**Rate Limiting**
+   MonoLLM includes built-in retry mechanisms, but you may need to implement additional backoff strategies for high-volume usage.
 
-**Code Assistance:**
-
-.. code-block:: python
-
-   config = RequestConfig(model="qwq-32b", temperature=0.2)
-   response = await client.generate("Explain this Python function: def fibonacci(n):", config)
-
-**Data Analysis:**
-
-.. code-block:: python
-
-   config = RequestConfig(model="qwq-32b", show_thinking=True)
-   response = await client.generate("Analyze this sales data and find trends: [data]", config)
-
-**Creative Writing:**
-
-.. code-block:: python
-
-   config = RequestConfig(model="qwen-plus", temperature=1.0, max_tokens=2000)
-   response = await client.generate("Write a science fiction short story", config)
-
-You're now ready to build amazing applications with MonoLLM! 🚀 
+**Streaming Issues**
+   Some models require streaming mode (like QwQ models). The client will automatically enable streaming when needed. 

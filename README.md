@@ -143,6 +143,40 @@ config = RequestConfig(model="qwq-32b", show_thinking=True)
 response = await client.generate("Analyze this data and find trends", config)
 ```
 
+### Thinking Mode for Reasoning Models
+
+MonoLLM supports reasoning models that can show their internal thought process:
+
+```python
+# Enable thinking mode to see step-by-step reasoning
+config = RequestConfig(
+    model="qwq-32b",  # QwQ reasoning model
+    show_thinking=True,  # Show internal reasoning
+    temperature=0.7
+)
+
+response = await client.generate(
+    "Solve this step by step: If a train travels 120 km in 2 hours, then 180 km in 3 hours, what is its average speed?",
+    config
+)
+
+# Access the thinking process
+if response.thinking:
+    print("💭 Thinking Process:")
+    print(response.thinking)
+    print("\n" + "="*50)
+
+print("🎯 Final Answer:")
+print(response.content)
+```
+
+**Supported Reasoning Models:**
+- **QwQ-32B** (`qwq-32b`) - Stream-only reasoning model
+- **QwQ-Plus** (`qwq-plus`) - Stream-only reasoning model  
+- **Qwen3 Series** (`qwen3-32b`, `qwen3-8b`, etc.) - Support both modes
+- **OpenAI o1** (`o1`, `o1-mini`) - Advanced reasoning models
+- **DeepSeek R1** (`deepseek-reasoner`) - Reasoning model
+
 ### Creative Writing
 
 ```python

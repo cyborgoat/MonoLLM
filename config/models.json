@@ -12,21 +12,20 @@
           "max_tokens": 128000,
           "supports_temperature": true,
           "supports_streaming": true,
-          "is_reasoning_model": false
+          "supports_thinking": false
         },
         "gpt-4o-mini": {
           "name": "GPT-4o Mini",
           "max_tokens": 128000,
           "supports_temperature": true,
           "supports_streaming": true,
-          "is_reasoning_model": false
+          "supports_thinking": false
         },
         "o1": {
           "name": "OpenAI o1",
           "max_tokens": 100000,
           "supports_temperature": false,
           "supports_streaming": false,
-          "is_reasoning_model": true,
           "supports_thinking": true
         },
         "o1-mini": {
@@ -34,7 +33,6 @@
           "max_tokens": 65536,
           "supports_temperature": false,
           "supports_streaming": false,
-          "is_reasoning_model": true,
           "supports_thinking": true
         }
       }
@@ -46,19 +44,40 @@
       "supports_streaming": true,
       "supports_mcp": true,
       "models": {
+        "claude-opus-4": {
+          "name": "claude-opus-4-20250514",
+          "max_tokens": 320000,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "supports_thinking": false
+        },
+        "claude-sonnet-4": {
+          "name": "claude-sonnet-4-20250514",
+          "max_tokens": 320000,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "supports_thinking": false
+        },
+        "claude-3-7-sonnet": {
+          "name": "claude-3-7-sonnet-20250219",
+          "max_tokens": 320000,
+          "supports_temperature": true,
+          "supports_streaming": true,
+          "supports_thinking": false
+        },
         "claude-3-5-sonnet-20241022": {
           "name": "Claude 3.5 Sonnet",
           "max_tokens": 8192,
           "supports_temperature": true,
           "supports_streaming": true,
-          "is_reasoning_model": false
+          "supports_thinking": false
         },
         "claude-3-5-haiku-20241022": {
           "name": "Claude 3.5 Haiku",
           "max_tokens": 8192,
           "supports_temperature": true,
           "supports_streaming": true,
-          "is_reasoning_model": false
+          "supports_thinking": false
         }
       }
     },
@@ -69,26 +88,26 @@
       "supports_streaming": true,
       "supports_mcp": false,
       "models": {
-        "gemini-2.0-flash-exp": {
-          "name": "Gemini 2.0 Flash Experimental",
+        "gemini-2.5-flash-preview-05-20": {
+          "name": "gemini-2.5-flash-preview-05-20",
           "max_tokens": 8192,
           "supports_temperature": true,
           "supports_streaming": true,
-          "is_reasoning_model": false
+          "supports_thinking": false
         },
-        "gemini-1.5-pro": {
-          "name": "Gemini 1.5 Pro",
+        "gemini-2.5-pro-preview-05-06": {
+          "name": "gemini-2.5-pro-preview",
           "max_tokens": 8192,
           "supports_temperature": true,
           "supports_streaming": true,
-          "is_reasoning_model": false
+          "supports_thinking": false
         },
-        "gemini-1.5-flash": {
-          "name": "Gemini 1.5 Flash",
+        "gemini-2.0-flash": {
+          "name": "gemini-2.0-flash",
           "max_tokens": 8192,
           "supports_temperature": true,
           "supports_streaming": true,
-          "is_reasoning_model": false
+          "supports_thinking": false
         }
       }
     },
@@ -104,46 +123,48 @@
           "max_tokens": 8192,
           "supports_temperature": true,
           "supports_streaming": true,
-          "is_reasoning_model": false
+          "supports_thinking": true,
+          "stream_only": true
         },
         "qwq-32b": {
           "name": "QwQ 32B",
           "max_tokens": 8192,
           "supports_temperature": true,
           "supports_streaming": true,
-          "is_reasoning_model": false
+          "supports_thinking": true,
+          "stream_only": true
         },
         "qwen3-32b": {
           "name": "Qwen3 32B",
           "max_tokens": 32768,
           "supports_temperature": true,
           "supports_streaming": true,
-          "is_reasoning_model": true,
-          "supports_thinking": true
+          "supports_thinking": true,
+          "stream_only": true
         },
         "qwen3-30b-a3b": {
           "name": "qwen3-30b-a3b",
           "max_tokens": 98304,
           "supports_temperature": true,
           "supports_streaming": true,
-          "is_reasoning_model": true,
-          "supports_thinking": true
+          "supports_thinking": true,
+          "stream_only": true
         },
         "qwen3-8b": {
           "name": "Qwen3 8B",
           "max_tokens": 28672,
           "supports_temperature": true,
           "supports_streaming": true,
-          "is_reasoning_model": true,
-          "supports_thinking": true
+          "supports_thinking": true,
+          "stream_only": true
         },
         "qwen3-0.6b": {
           "name": "Qwen3 0.6B",
           "max_tokens": 28672,
           "supports_temperature": true,
           "supports_streaming": true,
-          "is_reasoning_model": true,
-          "supports_thinking": true
+          "supports_thinking": true,
+          "stream_only": true
         }
       }
     },
@@ -159,7 +180,6 @@
           "max_tokens": 4096,
           "supports_temperature": true,
           "supports_streaming": true,
-          "is_reasoning_model": true,
           "supports_thinking": true
         },
         "deepseek-chat": {
@@ -167,7 +187,7 @@
           "max_tokens": 8192,
           "supports_temperature": true,
           "supports_streaming": true,
-          "is_reasoning_model": false
+          "supports_thinking": false
         }
       }
     },
@@ -183,14 +203,14 @@
           "max_tokens": 160000,
           "supports_temperature": true,
           "supports_streaming": true,
-          "is_reasoning_model": false
+          "supports_thinking": false
         },
         "deepseek-r1": {
           "name": "DeepSeek R1",
           "max_tokens": 160000,
           "supports_temperature": true,
           "supports_streaming": true,
-          "is_reasoning_model": false
+          "supports_thinking": false
         }
       }
     }

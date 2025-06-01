@@ -90,7 +90,6 @@ Defines available models and their capabilities:
              "max_tokens": 8192,
              "supports_temperature": true,
              "supports_streaming": true,
-             "is_reasoning_model": true,
              "supports_thinking": true
            },
            "qwen-plus": {
@@ -98,7 +97,20 @@ Defines available models and their capabilities:
              "max_tokens": 4096,
              "supports_temperature": true,
              "supports_streaming": true,
-             "is_reasoning_model": false,
+             "supports_thinking": false
+           },
+           "o1": {
+             "name": "OpenAI o1",
+             "max_tokens": 100000,
+             "supports_temperature": false,
+             "supports_streaming": false,
+             "supports_thinking": true
+           },
+           "gpt-4o": {
+             "name": "GPT-4o",
+             "max_tokens": 128000,
+             "supports_temperature": true,
+             "supports_streaming": true,
              "supports_thinking": false
            }
          }
@@ -223,8 +235,7 @@ Add or modify provider configurations programmatically:
        max_tokens=4096,
        supports_temperature=True,
        supports_streaming=True,
-       is_reasoning_model=False,
-       provider_id="custom"
+       supports_thinking=False
    )
 
 Environment File (.env)

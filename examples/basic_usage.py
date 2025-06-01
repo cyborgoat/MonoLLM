@@ -121,7 +121,7 @@ async def list_available_models():
             provider_name = providers[provider_id].name
             print(f"\n{provider_name} models:")
             for model_id, model_info in provider_models.items():
-                reasoning = " (Reasoning)" if model_info.is_reasoning_model else ""
+                reasoning = " (Thinking)" if model_info.supports_thinking else ""
                 streaming = " (Streaming)" if model_info.supports_streaming else ""
                 print(f"  - {model_id}: {model_info.name}{reasoning}{streaming}")
 

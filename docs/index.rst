@@ -4,102 +4,55 @@
    contain the root `toctree` directive.
 
 MonoLLM Documentation
-========================
+=====================
 
-.. image:: https://img.shields.io/badge/version-0.1.1-blue.svg
-   :target: https://github.com/cyborgoat/MonoLLM
-   :alt: Version
+MonoLLM is a unified Python framework for accessing multiple Large Language Model providers through a single, consistent interface. It simplifies LLM integration by abstracting away provider-specific differences while maintaining full access to advanced features.
 
-.. image:: https://img.shields.io/badge/python-3.12+-blue.svg
-   :target: https://python.org
-   :alt: Python Version
+.. note::
+   MonoLLM v0.1.2 introduces comprehensive testing utilities, improved reasoning model support, and enhanced provider compatibility.
 
-.. image:: https://img.shields.io/badge/license-MIT-green.svg
-   :target: https://github.com/cyborgoat/MonoLLM/blob/main/LICENSE
-   :alt: License
+Key Features
+------------
 
-A powerful framework that provides a unified interface for multiple LLM providers, allowing developers to seamlessly switch between different AI models while maintaining consistent API interactions.
+**Unified Interface**
+   Access OpenAI, Anthropic, Google, Qwen, DeepSeek, and other providers through one API
 
-🚀 **Key Features**
--------------------
+**Advanced Capabilities**
+   - Streaming responses for real-time interaction
+   - Reasoning models with thinking steps (QwQ, o1, DeepSeek R1)
+   - Multi-turn conversations with context management
+   - Automatic model capability detection
 
-* **🔄 Unified Interface**: Access multiple LLM providers through a single, consistent API
-* **🌐 Proxy Support**: Configure HTTP/SOCKS5 proxies for all LLM calls
-* **📺 Streaming**: Real-time streaming responses for better user experience
-* **🧠 Reasoning Models**: Special support for reasoning models with thinking steps
-* **🌡️ Temperature Control**: Fine-tune creativity and randomness when supported
-* **🔢 Token Management**: Control costs with maximum output token limits
-* **🔧 MCP Integration**: Model Context Protocol support when available
-* **🎯 OpenAI Protocol**: Prefer OpenAI-compatible APIs for consistency
-* **⚙️ JSON Configuration**: Easy configuration management through JSON files
+**Developer Experience**
+   - Type-safe async/await API
+   - Comprehensive error handling
+   - Flexible configuration management
+   - Built-in retry mechanisms and rate limiting
 
-📋 **Supported Providers**
---------------------------
+**Production Ready**
+   - Proxy support for enterprise environments
+   - Token usage tracking and cost management
+   - Extensive logging and monitoring
+   - Comprehensive test suite
 
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15 15 10 15
-
-   * - Provider
-     - Status
-     - Streaming
-     - Reasoning
-     - MCP
-     - OpenAI Protocol
-   * - OpenAI
-     - ✅ Ready
-     - ✅ Yes
-     - ✅ Yes
-     - ✅ Yes
-     - ✅ Yes
-   * - Anthropic
-     - ✅ Ready
-     - ✅ Yes
-     - ❌ No
-     - ✅ Yes
-     - ❌ No
-   * - Google Gemini
-     - 🚧 Planned
-     - ✅ Yes
-     - ❌ No
-     - ❌ No
-     - ❌ No
-   * - Qwen (DashScope)
-     - ✅ Ready
-     - ✅ Yes
-     - ✅ Yes
-     - ❌ No
-     - ✅ Yes
-   * - DeepSeek
-     - ✅ Ready
-     - ✅ Yes
-     - ✅ Yes
-     - ❌ No
-     - ✅ Yes
-   * - Volcengine
-     - 🚧 Planned
-     - ✅ Yes
-     - ❌ No
-     - ❌ No
-     - ✅ Yes
-
-⚡ **Quick Start**
-------------------
+Quick Start
+-----------
 
 Installation
 ~~~~~~~~~~~~
 
+Install MonoLLM using pip:
+
 .. code-block:: bash
 
-   # Clone the repository
+   pip install monollm
+
+Or from source:
+
+.. code-block:: bash
+
    git clone https://github.com/cyborgoat/MonoLLM.git
    cd MonoLLM
-
-   # Install with uv (recommended)
-   uv sync
-   uv pip install -e .
-
-   # Or install with pip
    pip install -e .
 
 Basic Usage
@@ -112,52 +65,71 @@ Basic Usage
 
    async def main():
        async with UnifiedLLMClient() as client:
-           config = RequestConfig(
-               model="qwq-32b",  # Qwen's reasoning model
-               temperature=0.7,
-               max_tokens=1000,
-           )
-           
-           response = await client.generate(
-               "Explain quantum computing in simple terms.",
-               config
-           )
-           
+           config = RequestConfig(model="gpt-4o", temperature=0.7)
+           response = await client.generate("Explain quantum computing", config)
            print(response.content)
-           if response.usage:
-               print(f"Tokens used: {response.usage.total_tokens}")
 
    asyncio.run(main())
 
-CLI Usage
-~~~~~~~~~
+Configuration
+~~~~~~~~~~~~~
+
+Set up your API keys:
 
 .. code-block:: bash
 
-   # List available providers
-   monollm list-providers
+   export OPENAI_API_KEY="your-openai-key"
+   export ANTHROPIC_API_KEY="your-anthropic-key"
+   export DASHSCOPE_API_KEY="your-qwen-key"
+   export DEEPSEEK_API_KEY="your-deepseek-key"
 
-   # List available models
-   monollm list-models --provider qwen
+Supported Providers
+-------------------
 
-   # Generate text
-   monollm generate "What is AI?" --model qwq-32b --stream
+.. list-table::
+   :header-rows: 1
+   :widths: 20 30 25 25
 
-   # Use reasoning model with thinking steps
-   monollm generate "Solve: 2x + 5 = 13" --model qwq-32b --thinking
+   * - Provider
+     - Models
+     - Special Features
+     - Status
+   * - OpenAI
+     - GPT-4o, GPT-4o-mini, o1, o1-mini
+     - Reasoning models, MCP
+     - ✓ Full support
+   * - Anthropic
+     - Claude 3.5 Sonnet, Claude 3.5 Haiku
+     - MCP integration
+     - ✓ Full support
+   * - Qwen/DashScope
+     - QwQ-32B, Qwen3 series
+     - Thinking steps, Chinese
+     - ✓ Full support
+   * - DeepSeek
+     - DeepSeek V3, DeepSeek R1
+     - Code reasoning
+     - ✓ Full support
+   * - Google
+     - Gemini 2.0 Flash, Gemini 2.5 Pro
+     - Multimodal (planned)
+     - ✓ Basic support
+   * - Volcengine
+     - Doubao models
+     - Enterprise features
+     - ✓ Basic support
 
-📚 **Documentation Contents**
------------------------------
+Documentation Sections
+-----------------------
 
 .. toctree::
    :maxdepth: 2
    :caption: User Guide
 
-   installation
    quickstart
    configuration
-   cli
    examples
+   testing
 
 .. toctree::
    :maxdepth: 2
@@ -168,27 +140,25 @@ CLI Usage
    api/exceptions
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Developer Guide
-
-.. toctree::
    :maxdepth: 1
-   :caption: Additional Resources
+   :caption: Development
 
-🔗 **Useful Links**
--------------------
+   contributing
+   changelog
 
-* **GitHub Repository**: https://github.com/cyborgoat/MonoLLM
-* **Issue Tracker**: https://github.com/cyborgoat/MonoLLM/issues
-* **Discussions**: https://github.com/cyborgoat/MonoLLM/discussions
-* **PyPI Package**: https://pypi.org/project/monollm/ *(coming soon)*
+Getting Help
+------------
 
-📄 **License**
---------------
+- **GitHub Issues**: Report bugs and request features at https://github.com/cyborgoat/MonoLLM/issues
+- **Documentation**: Full documentation at https://cyborgoat.github.io/MonoLLM/
+- **Examples**: See the ``examples/`` directory for complete usage examples
 
-This project is licensed under the MIT License. See the `LICENSE <https://github.com/cyborgoat/MonoLLM/blob/main/LICENSE>`_ file for details.
+License
+-------
 
-Indices and tables
+MonoLLM is released under the MIT License. See the LICENSE file for details.
+
+Indices and Tables
 ==================
 
 * :ref:`genindex`

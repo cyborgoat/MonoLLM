@@ -84,7 +84,7 @@ CLI Usage:
 Author: cyborgoat
 License: MIT License
 Copyright: (c) 2025 cyborgoat
-Version: 0.1.1
+Version: 0.1.2
 
 For more information:
     - GitHub: https://github.com/cyborgoat/MonoLLM
@@ -116,7 +116,7 @@ from .core.models import (
 )
 
 # Version information
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 __author__ = "cyborgoat"
 __license__ = "MIT"
 __copyright__ = "Copyright (c) 2025 cyborgoat"

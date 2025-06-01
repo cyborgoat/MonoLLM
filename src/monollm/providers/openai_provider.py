@@ -56,16 +56,14 @@ class OpenAIProvider(BaseProvider):
         if config.max_tokens is not None:
             params["max_tokens"] = config.max_tokens
         
-        # For reasoning models, add specific parameters
+        # For reasoning models like o1, handle thinking mode
         model_info = self.provider_info.models.get(config.model)
-        if model_info and model_info.is_reasoning_model:
-            # Reasoning models don't support temperature and have different streaming behavior
-            if "temperature" in params:
-                del params["temperature"]
-            
-            # o1 models don't support streaming yet
-            if config.model.startswith("o1"):
-                params["stream"] = False
+        if model_info and model_info.supports_thinking:
+            # o1 models don't support temperature or max_tokens in the traditional sense
+            if "o1" in config.model:
+                # Remove temperature and max_tokens for o1 models
+                params.pop("temperature", None)
+                params.pop("max_tokens", None)
         
         return params
     

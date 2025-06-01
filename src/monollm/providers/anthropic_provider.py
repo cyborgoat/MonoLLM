@@ -81,10 +81,13 @@ class AnthropicProvider(BaseProvider):
         if not usage_data:
             return None
         
+        input_tokens = getattr(usage_data, 'input_tokens', 0) or 0
+        output_tokens = getattr(usage_data, 'output_tokens', 0) or 0
+        
         return Usage(
-            prompt_tokens=getattr(usage_data, 'input_tokens', 0),
-            completion_tokens=getattr(usage_data, 'output_tokens', 0),
-            total_tokens=getattr(usage_data, 'input_tokens', 0) + getattr(usage_data, 'output_tokens', 0),
+            prompt_tokens=input_tokens,
+            completion_tokens=output_tokens,
+            total_tokens=input_tokens + output_tokens,
         )
     
     async def generate(
@@ -148,11 +151,15 @@ class AnthropicProvider(BaseProvider):
                     if hasattr(chunk, 'usage'):
                         usage = self._parse_usage(chunk.usage)
                         
+                        stop_reason = None
+                        if hasattr(chunk, 'delta') and hasattr(chunk.delta, 'stop_reason'):
+                            stop_reason = chunk.delta.stop_reason
+                        
                         yield StreamChunk(
                             content="",
                             is_complete=True,
                             metadata={
-                                "stop_reason": getattr(chunk, 'delta', {}).get('stop_reason'),
+                                "stop_reason": stop_reason,
                                 "usage": usage.model_dump() if usage else None,
                             }
                         )

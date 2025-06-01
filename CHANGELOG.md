@@ -1,151 +1,123 @@
 # Changelog
 
-All notable changes to the UnifiedLLM project will be documented in this file.
+All notable changes to MonoLLM will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.1.2] - 2025-06-01
 
 ### Added
-- Comprehensive documentation with Sphinx and GitHub Pages deployment
-- Professional README with badges, examples, and detailed feature descriptions
-- Contributing guide with development workflow and code style guidelines
-- Comprehensive headers and documentation for all source files
-- MIT License with proper copyright attribution
+- **Comprehensive Test Suite**: Complete testing framework with 7 test scripts
+  - `test_all_models.py`: Test all configured models with streaming and thinking capabilities
+  - `test_single_model.py`: Individual model testing with custom configurations
+  - `test_thinking.py`: Specialized tests for reasoning models with quality analysis
+  - `test_providers.py`: Provider-specific testing with edge cases
+  - `run_tests.py`: Unified test runner with multiple options
+- **Quality Metrics**: Thinking quality scoring system (0.0-1.0) with step coverage analysis
+- **Test Scenarios**: 5 reasoning test scenarios (basic_math, logic_puzzle, multi_step_problem, complex_reasoning, code_reasoning)
+- **Enhanced Documentation**: Professional, user-friendly documentation with comprehensive testing guide
+- **Model Validation**: Automatic model capability detection and validation
+- **Performance Monitoring**: Response timing, token usage tracking, and streaming performance metrics
 
 ### Changed
-- Updated copyright year to 2025
-- Updated author attribution to cyborgoat
-- Enhanced CLI with better help text and parameter descriptions
-- Improved error messages and user feedback throughout the system
+- **Parameter Unification**: Merged `is_reasoning_model` and `supports_thinking` into single `supports_thinking` parameter
+- **Provider Improvements**: Enhanced QwenProvider, OpenAIProvider, DeepSeekProvider, and AnthropicProvider
+- **Stream-Only Support**: Automatic streaming enablement for models that require it (QwQ models)
+- **Documentation Overhaul**: Cleaner, more professional documentation with reduced emoji usage
+- **CLI Enhancements**: Improved model listing with unified "Thinking" column instead of separate "Reasoning" column
 
-### Documentation
-- Added comprehensive Sphinx documentation system
-- Created detailed API reference documentation
-- Added installation, configuration, and usage guides
-- Created extensive examples and use case documentation
-- Set up automatic GitHub Pages deployment
+### Fixed
+- **Anthropic Provider**: Fixed `_parse_usage` method to handle None values and streaming response parsing
+- **Qwen Provider**: Removed problematic `enable_thinking` parameter that wasn't supported by OpenAI client
+- **Client Validation**: Auto-remove temperature parameter for models that don't support it
+- **Model Configuration**: Updated QwQ models to include proper `supports_thinking` and `stream_only` flags
+- **Import Statements**: Fixed all documentation imports from `unified_llm` to `monollm`
 
-## [0.1.1] - 2025-05-31
+### Removed
+- **Deprecated Parameter**: Removed `is_reasoning_model` field from ModelInfo class and all configurations
+- **Redundant Documentation**: Cleaned up excessive emoji usage and redundant sections
+
+## [0.1.1] - 2025-01-26
 
 ### Added
-- Enhanced CLI interface with rich terminal output
-- Comprehensive error handling with custom exception hierarchy
-- Support for reasoning models with thinking step display
-- Streaming response support for real-time output
-- Multi-turn conversation support with message history
-- Proxy configuration support for HTTP/SOCKS5 proxies
-- Token usage tracking and display
-- Configuration management through JSON files and environment variables
-
-### Providers
-- ✅ **OpenAI**: Full support including reasoning models (o1, o1-mini)
-- ✅ **Anthropic**: Claude models with MCP integration support
-- ✅ **Qwen/DashScope**: Complete implementation including QwQ reasoning model
-- ✅ **DeepSeek**: Full support including DeepSeek-R1 reasoning model
-- 🚧 **Google Gemini**: Planned implementation
-- 🚧 **Volcengine**: Planned implementation
+- Initial release of MonoLLM framework
+- Support for multiple LLM providers (OpenAI, Anthropic, Qwen, DeepSeek, Google, Volcengine)
+- Unified interface for text generation and streaming
+- Reasoning model support with thinking steps
+- Command-line interface (CLI)
+- Configuration management through JSON files
+- Comprehensive error handling and retry mechanisms
 
 ### Features
-- **Unified Interface**: Single API for all providers
+- **Unified Interface**: Single API for multiple LLM providers
 - **Streaming Support**: Real-time response streaming
-- **Reasoning Models**: Special handling for thinking steps
-- **Temperature Control**: Creativity adjustment when supported
-- **Token Management**: Cost control with output limits
-- **MCP Integration**: Model Context Protocol support
-- **OpenAI Protocol**: Preference for compatible APIs
-- **Rich CLI**: Beautiful terminal interface with tables and formatting
+- **Reasoning Models**: Support for models with thinking capabilities (QwQ, o1, DeepSeek R1)
+- **Multi-turn Conversations**: Context-aware conversation handling
+- **Proxy Support**: HTTP/SOCKS5 proxy configuration
+- **Token Management**: Usage tracking and cost estimation
+- **Type Safety**: Full type hints and Pydantic models
 
-### Technical
-- Async/await architecture for optimal performance
-- Pydantic models for type safety and validation
-- Comprehensive error handling and retry mechanisms
-- Rich console output with progress indicators
-- Configuration validation and environment variable support
+### Supported Providers
+- **OpenAI**: GPT-4o, GPT-4o-mini, o1, o1-mini models
+- **Anthropic**: Claude 3.5 Sonnet, Claude 3.5 Haiku models
+- **Qwen/DashScope**: QwQ-32B, Qwen3 series models
+- **DeepSeek**: DeepSeek V3, DeepSeek R1 models
+- **Google**: Gemini 2.0 Flash, Gemini 2.5 Pro models (basic support)
+- **Volcengine**: Doubao models (basic support)
 
-## [0.1.0] - 2025-05-31
+## [Unreleased]
 
-### Added
-- Initial project structure and core framework
-- Basic client implementation for unified LLM access
-- Core data models and type definitions
-- Configuration system with JSON file support
-- Basic CLI implementation
-- Provider abstraction layer
-- Initial OpenAI provider implementation
-
-### Infrastructure
-- Python 3.13+ support with modern async patterns
-- UV package manager integration
-- Pre-commit hooks for code quality
-- Basic testing framework setup
-- Initial documentation structure
-
-### Core Components
-- `UnifiedLLMClient`: Main client interface
-- `RequestConfig`: Configuration management
-- `LLMResponse`: Response handling
-- `Message`: Conversation message structure
-- Basic exception hierarchy
+### Planned
+- Enhanced multimodal support for Google Gemini models
+- Additional provider integrations
+- Advanced conversation management features
+- Performance optimizations and caching
+- Extended CLI functionality
 
 ---
 
 ## Release Notes
 
+### Version 0.1.2 Highlights
+
+This release focuses on testing infrastructure, documentation improvements, and parameter unification to provide a more robust and user-friendly experience.
+
+**Key Achievements:**
+- **Comprehensive Testing**: 7 specialized test scripts with quality metrics and performance monitoring
+- **Parameter Unification**: Simplified model configuration with unified `supports_thinking` parameter
+- **Enhanced Documentation**: Professional, clean documentation with comprehensive testing guide
+- **Provider Stability**: Fixed multiple provider issues and improved error handling
+- **Quality Analysis**: Advanced thinking quality scoring and step coverage analysis
+
+**Testing Infrastructure:**
+- Automated model discovery and validation
+- Reasoning quality analysis with 0.0-1.0 scoring
+- Provider-specific edge case testing
+- Performance monitoring and metrics
+- Unified test runner with multiple options
+
+**Documentation Improvements:**
+- Cleaner, more professional appearance
+- Comprehensive testing guide
+- User-friendly quickstart
+- Reduced emoji usage for professional look
+- Enhanced API documentation
+
 ### Version 0.1.1 Highlights
 
-This release represents a major milestone in the UnifiedLLM project, bringing it from a basic framework to a production-ready system with comprehensive features and documentation.
+Initial release bringing together multiple LLM providers under a unified interface.
 
-**🎯 Key Achievements:**
-- **Multi-Provider Support**: Successfully implemented 4 major LLM providers
-- **Reasoning Model Support**: Special handling for advanced reasoning models
-- **Professional Documentation**: Complete Sphinx documentation with GitHub Pages
-- **Rich CLI Experience**: Beautiful terminal interface with comprehensive commands
-- **Production Ready**: Robust error handling, configuration management, and testing
+**Core Features:**
+- **Multi-Provider Support**: OpenAI, Anthropic, Qwen, DeepSeek
+- **Reasoning Models**: Special support for thinking-capable models (QwQ, o1, DeepSeek R1)
+- **Streaming Support**: Real-time response streaming
+- **Rich CLI**: Beautiful terminal interface with comprehensive commands
+- **Type Safety**: Full type hints and Pydantic models
 
-**🚀 Provider Status:**
-- **Ready for Production**: OpenAI, Anthropic, Qwen, DeepSeek
-- **In Development**: Google Gemini, Volcengine
-
-**📚 Documentation:**
-- Complete API reference with examples
-- Installation and configuration guides
-- CLI documentation with all commands
-- Contributing guidelines for developers
-- Comprehensive examples and use cases
-
-**🛠️ Developer Experience:**
-- Type-safe API with Pydantic models
-- Comprehensive error handling
-- Rich console output and progress indicators
-- Easy configuration through environment variables
-- Extensive testing and validation
-
-### Migration Guide
-
-#### From 0.1.0 to 0.1.1
-
-**Breaking Changes:**
-- None - this release maintains full backward compatibility
-
-**New Features:**
-- Enhanced CLI with new commands and options
-- Streaming support for real-time responses
-- Reasoning model support with thinking steps
-- Improved error messages and handling
-
-**Recommended Updates:**
-```python
-# Old way (still works)
-response = await client.generate("Hello", RequestConfig(model="gpt-4o"))
-
-# New way (recommended)
-async with UnifiedLLMClient() as client:
-    config = RequestConfig(model="gpt-4o", stream=True)
-    async for chunk in await client.generate_stream("Hello", config):
-        print(chunk.content, end="")
-```
+**Provider Status:**
+- **Production Ready**: OpenAI, Anthropic, Qwen, DeepSeek
+- **Basic Support**: Google Gemini, Volcengine
 
 ---
 
@@ -161,9 +133,9 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 ## Support
 
-- **Documentation**: https://cyborgoat.github.io/unified-llm/
-- **Issues**: https://github.com/cyborgoat/unified-llm/issues
-- **Discussions**: https://github.com/cyborgoat/unified-llm/discussions
+- **Documentation**: https://cyborgoat.github.io/MonoLLM/
+- **Issues**: https://github.com/cyborgoat/MonoLLM/issues
+- **Repository**: https://github.com/cyborgoat/MonoLLM
 
 ---
 

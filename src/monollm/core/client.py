@@ -395,11 +395,11 @@ class UnifiedLLMClient:
 
     def _validate_request_config(
             self, config: RequestConfig
-    ) -> tuple[str, str, ModelInfo]:
+    ) -> tuple[str, str, ModelInfo, RequestConfig]:
         """Validate request configuration and resolve provider/model.
 
         Returns:
-            Tuple of (provider_id, model_id, model_info)
+            Tuple of (provider_id, model_id, model_info, validated_config)
         """
         # Resolve provider and model
         provider_id, model_info = self.get_model_info(config.model, config.provider)
@@ -410,13 +410,17 @@ class UnifiedLLMClient:
                 f"Provider '{provider_id}' is not available. Check your API key configuration."
             )
 
-        # Validate temperature setting
+        # Auto-enable streaming for stream-only models
+        if hasattr(model_info, 'stream_only') and model_info.stream_only and not config.stream:
+            # Create a new config with streaming enabled
+            config = config.model_copy()
+            config.stream = True
+
+        # Auto-remove temperature for models that don't support it
         if config.temperature is not None and not model_info.supports_temperature:
-            raise ValidationError(
-                f"Model '{config.model}' does not support temperature control",
-                field="temperature",
-                value=config.temperature,
-            )
+            # Create a new config without temperature
+            config = config.model_copy()
+            config.temperature = None
 
         # Validate streaming setting
         if config.stream and not model_info.supports_streaming:
@@ -434,7 +438,7 @@ class UnifiedLLMClient:
                 value=config.show_thinking,
             )
 
-        return provider_id, config.model, model_info
+        return provider_id, config.model, model_info, config
 
     async def generate(
             self,
@@ -455,7 +459,7 @@ class UnifiedLLMClient:
             messages = [Message(role="user", content=messages)]
 
         # Validate configuration
-        provider_id, model_id, model_info = self._validate_request_config(config)
+        provider_id, model_id, model_info, config = self._validate_request_config(config)
 
         # Get provider
         provider = self.providers[provider_id]
@@ -510,7 +514,7 @@ class UnifiedLLMClient:
         config.stream = True
 
         # Validate configuration
-        provider_id, model_id, model_info = self._validate_request_config(config)
+        provider_id, model_id, model_info, config = self._validate_request_config(config)
 
         # Get provider
         provider = self.providers[provider_id]
